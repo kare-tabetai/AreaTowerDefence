@@ -15,10 +15,12 @@ public class Walker : MonoBehaviour {
         agent = GetComponent<NavMeshAgent>();
 	}
 
-    public void Touch()
+    public void Touch(TouchInputManager.RayCastResult rayCastResult)
     {
-        Instantiate(instableArea, transform.parent);
-        instableArea.transform.position = transform.position;
+        const float OffsetY = 0.05f;//重なってちらつくのを防ぐため
+        var pos = rayCastResult.HitInfo.point;
+        pos.y = OffsetY;
+        Instantiate(instableArea, pos,instableArea.transform.rotation);
     }
 	
 	void Update () {

@@ -8,16 +8,36 @@ public class TouchInputManager : MonoSingleton<TouchInputManager> {
     bool isTouchInput;
     [SerializeField]
     LayerMask layerMask;
+    [SerializeField]
+    float rayLength = 20f;
+
+    bool touched;
 
     public struct RayCastResult
     {
-        public bool wasHit;
-        public RaycastHit hitInfo;
+        public bool WasHit;
+        public bool TouchDown;
+        public RaycastHit HitInfo;
     }
 
 	void Start () {
 		
 	}
+
+    void LateUpdate()
+    {
+        if (isTouchInput)
+        {
+            if (0 < Input.touchCount)
+            {
+                touched = true;
+            }
+            else
+            {
+                touched = false;
+            }
+        }
+    }
 
     public RayCastResult GetTouchingWarldPosition()
     {
@@ -34,27 +54,37 @@ public class TouchInputManager : MonoSingleton<TouchInputManager> {
     RayCastResult TouchRayCast()
     {
         var result = new RayCastResult();
-        result.wasHit = false;
+        result.WasHit = false;
+        result.TouchDown = false;
 
         if (Input.touchCount <= 0) { return result; }
         Vector3 touchPos = Input.GetTouch(0).position;
         RaycastHit hitInfo;
-        result.wasHit = RayCast(touchPos,out hitInfo);
-        result.hitInfo = hitInfo;
+        result.WasHit = RayCast(touchPos,out hitInfo);
+        result.HitInfo = hitInfo;
+        if (!touched)
+        {
+            result.TouchDown = true;
+        }
         return result;
     }
 
     RayCastResult MouseRayCast()
     {
         var result = new RayCastResult();
-        result.wasHit = false;
+        result.WasHit = false;
+        result.TouchDown = false;
 
         if (Input.GetMouseButton(0))
         {
             Vector3 touchPos = Input.mousePosition;
             RaycastHit hitInfo;
-            result.wasHit = RayCast(touchPos,out hitInfo);
-            result.hitInfo = hitInfo;
+            result.WasHit = RayCast(touchPos,out hitInfo);
+            result.HitInfo = hitInfo;
+            if (Input.GetMouseButtonDown(0))
+            {
+                result.TouchDown = true;
+            }
             return result;
         }
         return result;
@@ -63,6 +93,6 @@ public class TouchInputManager : MonoSingleton<TouchInputManager> {
     bool RayCast(Vector3 touchPos,out RaycastHit hitInfo)
     {
         Ray ray = Camera.main.ScreenPointToRay(touchPos);
-        return Physics.Raycast(ray, out hitInfo, 20f, layerMask);
+        return Physics.Raycast(ray, out hitInfo, rayLength, layerMask);
     }
 }

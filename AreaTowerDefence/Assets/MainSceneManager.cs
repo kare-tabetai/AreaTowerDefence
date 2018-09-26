@@ -13,14 +13,15 @@ public class MainSceneManager : MonoSingleton<MainSceneManager>
 	
 	void Update () {
         var touchResult = TouchInputManager.Instance.GetTouchingWarldPosition();
-        if (!touchResult.wasHit) { return; }
-        if (touchResult.hitInfo.collider.tag == "Stage")
+        if (!touchResult.WasHit) { return; }
+        if (touchResult.HitInfo.collider.tag == "Stage")
         {
-            target.position = touchResult.hitInfo.point;
+            target.position = touchResult.HitInfo.point;
         }
-        if (touchResult.hitInfo.collider.tag == "Players")
+        if (touchResult.HitInfo.collider.tag == "Player"
+            &&touchResult.TouchDown == true)
         {
-            touchResult.hitInfo.collider.GetComponent<Walker>().Touch();
+            touchResult.HitInfo.collider.GetComponent<Walker>().Touch(touchResult);
         }
     }
 }
