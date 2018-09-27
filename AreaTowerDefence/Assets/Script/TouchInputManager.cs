@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+//UpdateをほかのUpdateよりも前に呼び出したいのでスクリプトの優先順を早くしている
+[DefaultExecutionOrder(-10)]
 public class TouchInputManager : MonoSingleton<TouchInputManager> {
 
     [SerializeField]
@@ -11,35 +13,26 @@ public class TouchInputManager : MonoSingleton<TouchInputManager> {
     [SerializeField]
     float rayLength = 20f;
 
-    bool touched;
+    public TouchInfo CurrentTouchInfo { private set; get; }
 
-    public struct RayCastResult
+    public struct TouchInfo
     {
-        public bool WasHit;
-        public bool TouchDown;
-        public RaycastHit HitInfo;
+        public bool Touched;//タッチされているか
+        public bool ObjectHit;//タッチ位置からのレイがオブジェクトに当たったか
+        public Touch Touch;
+        public RaycastHit RayCastInfo;
     }
 
 	void Start () {
 		
 	}
 
-    void LateUpdate()
+    void Update()
     {
-        if (isTouchInput)
-        {
-            if (0 < Input.touchCount)
-            {
-                touched = true;
-            }
-            else
-            {
-                touched = false;
-            }
-        }
+        CurrentTouchInfo = TouchInfoUpdate();
     }
 
-    public RayCastResult GetTouchingWarldPosition()
+    TouchInfo TouchInfoUpdate()
     {
         if (isTouchInput)
         {
@@ -51,43 +44,55 @@ public class TouchInputManager : MonoSingleton<TouchInputManager> {
         }
     }
 
-    RayCastResult TouchRayCast()
+    TouchInfo TouchRayCast()
     {
-        var result = new RayCastResult();
-        result.WasHit = false;
-        result.TouchDown = false;
+        var touchInfo = new TouchInfo();
 
-        if (Input.touchCount <= 0) { return result; }
-        Vector3 touchPos = Input.GetTouch(0).position;
-        RaycastHit hitInfo;
-        result.WasHit = RayCast(touchPos,out hitInfo);
-        result.HitInfo = hitInfo;
-        if (!touched)
+        if (Input.touchCount <= 0)
         {
-            result.TouchDown = true;
+            touchInfo.Touched = false;
+            return touchInfo;
         }
-        return result;
+        var touch = Input.GetTouch(0);
+        Vector3 touchPos = touch.position;
+        RaycastHit hitInfo;
+
+        touchInfo.ObjectHit = RayCast(touchPos,out hitInfo);
+        touchInfo.RayCastInfo = hitInfo;
+        touchInfo.Touch = touch;
+        return touchInfo;
     }
 
-    RayCastResult MouseRayCast()
+    TouchInfo MouseRayCast()
     {
-        var result = new RayCastResult();
-        result.WasHit = false;
-        result.TouchDown = false;
-
-        if (Input.GetMouseButton(0))
+        Vector3 touchPos = Input.mousePosition;
+        RaycastHit hitInfo;
+        var touchInfo = new TouchInfo();
+        touchInfo.ObjectHit = RayCast(touchPos, out hitInfo);
+        touchInfo.RayCastInfo = hitInfo;
+        if (Input.GetMouseButtonDown(0))
         {
-            Vector3 touchPos = Input.mousePosition;
-            RaycastHit hitInfo;
-            result.WasHit = RayCast(touchPos,out hitInfo);
-            result.HitInfo = hitInfo;
-            if (Input.GetMouseButtonDown(0))
-            {
-                result.TouchDown = true;
-            }
-            return result;
+            touchInfo.Touch = new Touch();
+            touchInfo.Touch.phase = TouchPhase.Began;
+            touchInfo.Touched = true;
+            return touchInfo;
         }
-        return result;
+        else if (Input.GetMouseButtonUp(0))
+        {
+            touchInfo.Touch = new Touch();
+            touchInfo.Touch.phase = TouchPhase.Ended;
+            touchInfo.Touched = true;
+            return touchInfo;
+        }
+        else if (Input.GetMouseButton(0))
+        {
+            touchInfo.Touch = new Touch();
+            touchInfo.Touch.phase = TouchPhase.Moved;
+            touchInfo.Touched = true;
+            return touchInfo;
+        }
+        touchInfo.Touched = false;
+        return touchInfo;
     }
 
     bool RayCast(Vector3 touchPos,out RaycastHit hitInfo)

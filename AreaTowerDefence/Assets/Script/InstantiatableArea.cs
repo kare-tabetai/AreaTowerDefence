@@ -2,18 +2,19 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class InstantiatableArea : MonoBehaviour,TouchObject {
+public class InstantiatableArea : MonoBehaviour,iTouchEnd {
 
-	void Start () {
+	void Start ()
+    {
 		
 	}
 
-    public void Touch(TouchInputManager.RayCastResult rayCastResult)
+    public void TouchEnd(TouchInputManager.TouchInfo touchInfo)
     {
-        const float OffsetY = 0.05f;//重なってちらつくのを防ぐため
+        const float OffsetY = 0.05f;//重なりを防ぐため
 
-        var instantiatedObject = Instantiate(MainSceneManager.Instance.GetInstantiatableActor(InstantiatableActor.Walker));
-        var pos = rayCastResult.HitInfo.point;
+        var instantiatedObject = Instantiate(MainSceneManager.Instance.DraggingActor);
+        var pos = touchInfo.RayCastInfo.point;
         pos.y = OffsetY;
         instantiatedObject.transform.position = pos;
     }

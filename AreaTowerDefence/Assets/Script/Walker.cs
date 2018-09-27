@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class Walker : MonoBehaviour,TouchObject {
+public class Walker : MonoBehaviour,iTouchBegin {
 
     [SerializeField]
     GameObject instableArea;
@@ -15,10 +15,10 @@ public class Walker : MonoBehaviour,TouchObject {
         target = MainSceneManager.Instance.target;
 	}
 
-    public void Touch(TouchInputManager.RayCastResult rayCastResult)
+    public void TouchBegin(TouchInputManager.TouchInfo touchInfo)
     {
         const float OffsetY = 0.05f;//重なってちらつくのを防ぐため
-        var pos = rayCastResult.HitInfo.point;
+        var pos = touchInfo.RayCastInfo.point;
         pos.y = OffsetY;
         Instantiate(instableArea, pos,instableArea.transform.rotation);
     }

@@ -2,12 +2,6 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum InstantiatableActor
-{
-    Walker,
-
-}
-
 public class MainSceneManager : MonoSingleton<MainSceneManager>
 {
     [SerializeField]
@@ -15,28 +9,50 @@ public class MainSceneManager : MonoSingleton<MainSceneManager>
     [SerializeField]
     GameObject[] InstantiatableActors;
 
-    public GameObject GetInstantiatableActor(InstantiatableActor instActor)
-    {
-        return InstantiatableActors[(int)instActor];
-    }
+    public GameObject DraggingActor;//ドラッグして選択中のActor
 
 	void Start () {
 		
 	}
+
+    public void InstantiatableActorButtonBeginDrag(GameObject instActor)
+    {
+        print("drag");
+        DraggingActor = instActor;
+    }
 	
 	void Update () {
-        var touchResult = TouchInputManager.Instance.GetTouchingWarldPosition();
-        if (!touchResult.WasHit) { return; }
-        if (touchResult.HitInfo.collider.tag == "Stage")
+        var touchInfo = TouchInputManager.Instance.CurrentTouchInfo;
+        if (!touchInfo.Touched)
         {
-            target.position = touchResult.HitInfo.point;
+            DraggingActor = null;
+            return;
+        }
+        if (!touchInfo.ObjectHit)
+        {
+            return;
         }
 
-        var touchObject = touchResult.HitInfo.collider.GetComponent<TouchObject>();
-        if (touchObject != null
-            &&touchResult.TouchDown == true)
+        if (touchInfo.RayCastInfo.collider.tag == "Stage")
         {
-            touchObject.Touch(touchResult);
+            target.position = touchInfo.RayCastInfo.point;
+        }
+
+        if(touchInfo.Touch.phase == TouchPhase.Began)
+        {
+            var touchObject = touchInfo.RayCastInfo.collider.GetComponent<iTouchBegin>();
+            if (touchObject != null)
+            {
+                touchObject.TouchBegin(touchInfo);
+            }
+        }
+        if (touchInfo.Touch.phase == TouchPhase.Ended)
+        {
+            var touchObject = touchInfo.RayCastInfo.collider.GetComponent<iTouchEnd>();
+            if (touchObject != null)
+            {
+                touchObject.TouchEnd(touchInfo);
+            }
         }
     }
 }
