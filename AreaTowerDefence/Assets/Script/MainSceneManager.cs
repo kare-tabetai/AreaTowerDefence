@@ -5,70 +5,32 @@ using UnityEngine;
 public class MainSceneManager : MonoSingleton<MainSceneManager>
 {
     [SerializeField]
-    public Transform[] PlayerTower;
-    [SerializeField]
-    public Color[] PlayerColor;
-
-    public GameObject DraggingActor;//ドラッグして選択中のActor
-
+    public ActorController[] controllers;
+    
 	void Start () {
-        Debug.Assert(PlayerTower.Length == PlayerColor.Length);
+
 	}
 
-    public void InstantiatableActorButtonBeginDrag(GameObject instActor)
-    {
-        print("drag");
-        DraggingActor = instActor;
-    }
-	
 	void Update () {
-        var touchInfo = TouchInputManager.Instance.CurrentTouchInfo;
-        if (!touchInfo.Touched)
+        if (Input.GetButtonDown("Escape"))
         {
-            DraggingActor = null;
-            return;
-        }
-        if (!touchInfo.ObjectHit)
-        {
-            return;
-        }
-
-        if (touchInfo.RayCastInfo.collider.tag == "Stage")
-        {
-            //PlayerTower[0].position = touchInfo.RayCastInfo.point;
-        }
-
-        if(touchInfo.Touch.phase == TouchPhase.Began)
-        {
-            var touchObject = touchInfo.RayCastInfo.collider.GetComponent<iTouchBegin>();
-            if (touchObject != null)
-            {
-                touchObject.TouchBegin(touchInfo);
-            }
-        }
-        if (touchInfo.Touch.phase == TouchPhase.Ended)
-        {
-            var touchObject = touchInfo.RayCastInfo.collider.GetComponent<iTouchEnd>();
-            if (touchObject != null)
-            {
-                touchObject.TouchEnd(touchInfo);
-            }
+            Application.Quit();
         }
     }
 
     public Transform GetNearestOtherPlayerTower(int playerNum,Vector3 comparedPosition)
     {
-        Debug.Assert(PlayerTower.Length != 0);
+        Debug.Assert(controllers.Length != 0);
         Transform nearestTower = null;
         float sqrDist = float.PositiveInfinity;
-        for(int pNum = 0; pNum < PlayerTower.Length; pNum++)
+        for(int pNum = 0; pNum < controllers.Length; pNum++)
         {
             if (pNum == playerNum) { continue; }
-            float dist = Vector3.SqrMagnitude(PlayerTower[pNum].position - comparedPosition);
+            float dist = Vector3.SqrMagnitude(controllers[pNum].OwnTower.position - comparedPosition);
             if (dist < sqrDist)
             {
                 sqrDist = dist;
-                nearestTower = PlayerTower[pNum];
+                nearestTower = controllers[pNum].OwnTower;
             }
         }
         Debug.Assert(nearestTower != null);

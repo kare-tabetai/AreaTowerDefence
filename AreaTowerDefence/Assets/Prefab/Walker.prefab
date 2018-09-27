@@ -114,7 +114,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   PlayerNum: 0
-  instableArea: {fileID: 1496121370521220, guid: 998691390c8849d47a5f3cb5fa4aeca5,
+  instantiatableArea: {fileID: 1496121370521220, guid: 998691390c8849d47a5f3cb5fa4aeca5,
     type: 2}
 --- !u!136 &136154814290874060
 CapsuleCollider:

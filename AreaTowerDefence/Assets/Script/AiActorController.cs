@@ -2,14 +2,14 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class InstantiatableArea : Actor{
+public class AiActorController : ActorController
+{
 
-	void Start ()
-    {
+	void Start () {
 		
 	}
-
-    void Update () {
+	
+	void Update () {
 		
 	}
 }

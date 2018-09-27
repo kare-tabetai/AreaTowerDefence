@@ -6,7 +6,7 @@ using UnityEngine.AI;
 public class Walker : Actor, iTouchBegin {
 
     [SerializeField]
-    GameObject instableArea;
+    GameObject instantiatableArea;
 
     Transform target;
     NavMeshAgent agent;
@@ -17,10 +17,16 @@ public class Walker : Actor, iTouchBegin {
 
     public void TouchBegin(TouchInputManager.TouchInfo touchInfo)
     {
+        InstantiateInstantiatableArea();
+    }
+
+    //AIからTouchBeginを介さずにアクセスさせるためpublic
+    public void InstantiateInstantiatableArea()
+    {
         const float OffsetY = 0.05f;//重なってちらつくのを防ぐため
-        var pos = touchInfo.RayCastInfo.point;
+        var pos = transform.position;
         pos.y = OffsetY;
-        Instantiate(instableArea, pos,instableArea.transform.rotation);
+        Instantiate(instantiatableArea, pos, instantiatableArea.transform.rotation);
     }
 	
 	void Update () {
