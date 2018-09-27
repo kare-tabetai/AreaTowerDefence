@@ -5,14 +5,14 @@ using UnityEngine;
 public class MainSceneManager : MonoSingleton<MainSceneManager>
 {
     [SerializeField]
-    public Transform target;
+    public Transform[] PlayerTower;
     [SerializeField]
-    GameObject[] InstantiatableActors;
+    public Color[] PlayerColor;
 
     public GameObject DraggingActor;//ドラッグして選択中のActor
 
 	void Start () {
-		
+        Debug.Assert(PlayerTower.Length == PlayerColor.Length);
 	}
 
     public void InstantiatableActorButtonBeginDrag(GameObject instActor)
@@ -35,7 +35,7 @@ public class MainSceneManager : MonoSingleton<MainSceneManager>
 
         if (touchInfo.RayCastInfo.collider.tag == "Stage")
         {
-            target.position = touchInfo.RayCastInfo.point;
+            //PlayerTower[0].position = touchInfo.RayCastInfo.point;
         }
 
         if(touchInfo.Touch.phase == TouchPhase.Began)
@@ -54,5 +54,24 @@ public class MainSceneManager : MonoSingleton<MainSceneManager>
                 touchObject.TouchEnd(touchInfo);
             }
         }
+    }
+
+    public Transform GetNearestOtherPlayerTower(int playerNum,Vector3 comparedPosition)
+    {
+        Debug.Assert(PlayerTower.Length != 0);
+        Transform nearestTower = null;
+        float sqrDist = float.PositiveInfinity;
+        for(int pNum = 0; pNum < PlayerTower.Length; pNum++)
+        {
+            if (pNum == playerNum) { continue; }
+            float dist = Vector3.SqrMagnitude(PlayerTower[pNum].position - comparedPosition);
+            if (dist < sqrDist)
+            {
+                sqrDist = dist;
+                nearestTower = PlayerTower[pNum];
+            }
+        }
+        Debug.Assert(nearestTower != null);
+        return nearestTower;
     }
 }

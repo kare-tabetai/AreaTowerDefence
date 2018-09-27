@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class Walker : MonoBehaviour,iTouchBegin {
+public class Walker : Actor, iTouchBegin {
 
     [SerializeField]
     GameObject instableArea;
@@ -12,7 +12,7 @@ public class Walker : MonoBehaviour,iTouchBegin {
     NavMeshAgent agent;
 	void Start () {
         agent = GetComponent<NavMeshAgent>();
-        target = MainSceneManager.Instance.target;
+        target = MainSceneManager.Instance.GetNearestOtherPlayerTower(PlayerNum,transform.position);
 	}
 
     public void TouchBegin(TouchInputManager.TouchInfo touchInfo)
