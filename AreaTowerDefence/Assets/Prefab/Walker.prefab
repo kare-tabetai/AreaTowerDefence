@@ -25,7 +25,7 @@ GameObject:
   - component: {fileID: 54626346657501490}
   - component: {fileID: 136154814290874060}
   - component: {fileID: 114401805081334184}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Walker
   m_TagString: Player
   m_Icon: {fileID: 0}
@@ -39,7 +39,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1667252014080600}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -2.303124, y: 0.95188, z: -6.236763}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -113,8 +113,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a129f22a4c04bc44f900f31589f785bd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  target: {fileID: 0}
-  instableArea: {fileID: 1749514526914074, guid: 998691390c8849d47a5f3cb5fa4aeca5,
+  instableArea: {fileID: 1496121370521220, guid: 998691390c8849d47a5f3cb5fa4aeca5,
     type: 2}
 --- !u!136 &136154814290874060
 CapsuleCollider:

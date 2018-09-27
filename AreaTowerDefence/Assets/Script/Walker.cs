@@ -3,16 +3,16 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class Walker : MonoBehaviour {
+public class Walker : MonoBehaviour,TouchObject {
 
-    [SerializeField]
-    Transform target;
     [SerializeField]
     GameObject instableArea;
 
+    Transform target;
     NavMeshAgent agent;
 	void Start () {
         agent = GetComponent<NavMeshAgent>();
+        target = MainSceneManager.Instance.target;
 	}
 
     public void Touch(TouchInputManager.RayCastResult rayCastResult)

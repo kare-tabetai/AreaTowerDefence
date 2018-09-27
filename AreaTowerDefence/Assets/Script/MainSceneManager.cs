@@ -2,10 +2,23 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+public enum InstantiatableActor
+{
+    Walker,
+
+}
+
 public class MainSceneManager : MonoSingleton<MainSceneManager>
 {
     [SerializeField]
-    Transform target;
+    public Transform target;
+    [SerializeField]
+    GameObject[] InstantiatableActors;
+
+    public GameObject GetInstantiatableActor(InstantiatableActor instActor)
+    {
+        return InstantiatableActors[(int)instActor];
+    }
 
 	void Start () {
 		
@@ -18,10 +31,12 @@ public class MainSceneManager : MonoSingleton<MainSceneManager>
         {
             target.position = touchResult.HitInfo.point;
         }
-        if (touchResult.HitInfo.collider.tag == "Player"
+
+        var touchObject = touchResult.HitInfo.collider.GetComponent<TouchObject>();
+        if (touchObject != null
             &&touchResult.TouchDown == true)
         {
-            touchResult.HitInfo.collider.GetComponent<Walker>().Touch(touchResult);
+            touchObject.Touch(touchResult);
         }
     }
 }

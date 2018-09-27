@@ -22,8 +22,9 @@ GameObject:
   - component: {fileID: 33394508452355124}
   - component: {fileID: 23591511268624098}
   - component: {fileID: 64942370396228326}
-  m_Layer: 0
-  m_Name: instableArea
+  - component: {fileID: 114093741915467890}
+  m_Layer: 10
+  m_Name: instantiatableArea
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -98,3 +99,14 @@ MeshCollider:
   m_CookingOptions: 14
   m_SkinWidth: 0.01
   m_Mesh: {fileID: 10209, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!114 &114093741915467890
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1496121370521220}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f8676b605722be846a769f6f39a2bd23, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

@@ -35,7 +35,7 @@ MonoBehaviour:
   - 0
   - 0
   m_String_values:
-  - Assets/ProBuilder Data//Default Material Palette.asset
+  - Assets/ProBuilder Data/Default Material Palette.asset
   - RGBA(0.849, 0.723, 0.260, 1.000)
   - RGBA(0.254, 0.717, 0.260, 1.000)
   m_Color_values: []
