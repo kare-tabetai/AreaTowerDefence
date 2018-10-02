@@ -27,7 +27,7 @@ GameObject:
   - component: {fileID: 114401805081334184}
   m_Layer: 10
   m_Name: Walker
-  m_TagString: Player
+  m_TagString: Actor
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -113,7 +113,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a129f22a4c04bc44f900f31589f785bd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ownPlayerNum: 0
+  playerNumber: 0
   instantiateCost: 80
   instantiatableArea: {fileID: 1496121370521220, guid: 998691390c8849d47a5f3cb5fa4aeca5,
     type: 2}

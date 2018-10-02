@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class Walker : Actor, iTouchBegin {
+public class Walker : Unit, iTouchBegin {
 
     [SerializeField]
     GameObject instantiatableArea;
@@ -12,11 +12,16 @@ public class Walker : Actor, iTouchBegin {
     NavMeshAgent agent;
 	void Start () {
         agent = GetComponent<NavMeshAgent>();
-        target = MainSceneManager.Instance.GetNearestOtherPlayerTower(PlayerNum,transform.position);
+        target = MainSceneManager.Instance.GetNearestOtherPlayerTower(PlayerNumber,transform.position);
 	}
 
     public void TouchBegin(TouchInputManager.TouchInfo touchInfo)
     {
+        if (touchInfo.PlayerNum != PlayerNumber)
+        {
+            print("自分が生成したオブジェクト以外がタッチされました");
+            return;
+        }
         InstantiateInstantiatableArea();
     }
 
@@ -26,7 +31,8 @@ public class Walker : Actor, iTouchBegin {
         const float OffsetY = 0.05f;//重なってちらつくのを防ぐため
         var pos = transform.position;
         pos.y = OffsetY;
-        Instantiate(instantiatableArea, pos, instantiatableArea.transform.rotation);
+        var instantiateObject = Instantiate(instantiatableArea, pos, instantiatableArea.transform.rotation);
+        instantiateObject.GetComponent<Actor>().Initialize(PlayerNumber);
     }
 	
 	void Update () {

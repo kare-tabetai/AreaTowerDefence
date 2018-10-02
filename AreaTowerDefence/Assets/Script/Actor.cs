@@ -3,20 +3,26 @@ using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
-/// 動く駒を作るときはこれを継承
+/// 持ち主のプレイヤーがあるもの
+/// PlayerNumberが必要なもの
 /// </summary>
 public abstract class Actor : MonoBehaviour {
     [SerializeField]
-    int ownPlayerNum = 0;
-    public int PlayerNum
+    int playerNumber;
+    public int PlayerNumber
     {
-        get { return ownPlayerNum; }
-        private set { ownPlayerNum = value; }
+        get { return playerNumber; }
+        private set { playerNumber = value; }
     }
-    [SerializeField]
-    int instantiateCost = 100;
-    public int InstantiateCost
+
+    /// <summary>
+    /// 初期化したければ呼ぶ
+    /// 呼ばなくていいなら呼ばなくていい
+    /// </summary>
+    public virtual void Initialize(int playerNum)
     {
-        get { return instantiateCost; }
+        PlayerNumber = playerNum;
     }
+
+    
 }

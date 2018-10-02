@@ -4,15 +4,15 @@ using UnityEngine;
 
 public class PlayerActorController : ActorController {
 
-    public GameObject DraggingActor;//ドラッグして選択中のActor,DebugようにHideInspectorしてない
+    public GameObject DraggingUnit;//ドラッグして選択中のUnit,DebugようにHideInspectorしてない
 
     void Start () {
 		
 	}
 
-    public void InstantiatableActorButtonBeginDrag(GameObject instActor)
+    public void InstantiatableUnitButtonBeginDrag(GameObject instUnit)
     {
-        DraggingActor = instActor;
+        DraggingUnit = instUnit;
     }
 
     void Update () {
@@ -24,7 +24,7 @@ public class PlayerActorController : ActorController {
         var touchInfo = TouchInputManager.Instance.CurrentTouchInfo;
         if (!touchInfo.Touched)
         {
-            DraggingActor = null;
+            DraggingUnit = null;
             return;
         }
         if (!touchInfo.ObjectHit)
@@ -60,7 +60,7 @@ public class PlayerActorController : ActorController {
     {
         if(touchInfo.RayCastInfo.collider.tag== "InstantiatableArea")
         {
-            InstantiateDraggedActor(touchInfo.RayCastInfo.point);
+            InstantiateDraggedUnit(touchInfo.RayCastInfo.point);
         }
         var touchObject = touchInfo.RayCastInfo.collider.GetComponent<iTouchEnd>();
         if (touchObject != null)
@@ -69,19 +69,19 @@ public class PlayerActorController : ActorController {
         }
     }
 
-    void InstantiateDraggedActor(Vector3 instantiatePosition)
+    void InstantiateDraggedUnit(Vector3 instantiatePosition)
     {
         const float OffsetY = 0.05f;//重なりを防ぐため
-
-        var instantiateActor = DraggingActor.GetComponent<Actor>();
+        if (DraggingUnit == null) { return; }
+        var instantiateUnit = DraggingUnit.GetComponent<Unit>();
 
         //予算が足りなければ帰る
-        if (!costCounter.Pay(instantiateActor.InstantiateCost))
+        if (!costCounter.Pay(instantiateUnit.InstantiateCost))
         {
             return;
         }
 
-        var instantiatedObject = Instantiate(DraggingActor);
+        var instantiatedObject = Instantiate(DraggingUnit);
         var pos = instantiatePosition;
         pos.y = OffsetY;
         instantiatedObject.transform.position = pos;

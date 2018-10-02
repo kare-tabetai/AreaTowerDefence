@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
-/// Actorの生成コストを管理するクラス
+/// Unitの生成コストを管理するクラス
 /// </summary>
 public class CostCounter : MonoBehaviour {
 

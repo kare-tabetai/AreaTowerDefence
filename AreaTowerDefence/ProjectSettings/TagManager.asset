@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Stage
   - InstantiatableArea
+  - Actor
   layers:
   - Default
   - TransparentFX

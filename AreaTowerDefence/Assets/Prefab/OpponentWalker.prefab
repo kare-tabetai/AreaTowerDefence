@@ -23,10 +23,10 @@ GameObject:
   - component: {fileID: 23199572458826402}
   - component: {fileID: 136726698846546912}
   - component: {fileID: 195261706708392894}
-  - component: {fileID: 114582539127218590}
-  m_Layer: 0
+  - component: {fileID: 114375439452342524}
+  m_Layer: 10
   m_Name: OpponentWalker
-  m_TagString: Untagged
+  m_TagString: Actor
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -86,7 +86,7 @@ MeshFilter:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1570103729886868}
   m_Mesh: {fileID: 10206, guid: 0000000000000000e000000000000000, type: 0}
---- !u!114 &114582539127218590
+--- !u!114 &114375439452342524
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
@@ -94,11 +94,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 1570103729886868}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 80978b1f4be8e6c4182b924a7896f390, type: 3}
+  m_Script: {fileID: 11500000, guid: a129f22a4c04bc44f900f31589f785bd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ownPlayerNum: 1
-  instantiateCost: 80
+  playerNumber: 1
+  instantiateCost: 100
+  instantiatableArea: {fileID: 0}
 --- !u!136 &136726698846546912
 CapsuleCollider:
   m_ObjectHideFlags: 1

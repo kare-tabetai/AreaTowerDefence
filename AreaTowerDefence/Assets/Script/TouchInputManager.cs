@@ -12,6 +12,8 @@ public class TouchInputManager : MonoSingleton<TouchInputManager> {
     LayerMask layerMask;
     [SerializeField]
     float rayLength = 20f;
+    [SerializeField,Tooltip("このInputをしているPlayerの番号")]
+    int playerNum;
 
     public TouchInfo CurrentTouchInfo { private set; get; }
 
@@ -21,10 +23,16 @@ public class TouchInputManager : MonoSingleton<TouchInputManager> {
         public bool ObjectHit;//タッチ位置からのレイがオブジェクトに当たったか
         public Touch Touch;
         public RaycastHit RayCastInfo;
+        public int PlayerNum;
     }
 
 	void Start () {
-		
+        //playerNumがPlayerであることを表明
+        Debug.Assert(
+            MainSceneManager.Instance
+            .Controllers[playerNum]
+            .GetComponent<PlayerActorController>()
+            );
 	}
 
     void Update()
@@ -60,6 +68,7 @@ public class TouchInputManager : MonoSingleton<TouchInputManager> {
         touchInfo.ObjectHit = RayCast(touchPos,out hitInfo);
         touchInfo.RayCastInfo = hitInfo;
         touchInfo.Touch = touch;
+        touchInfo.PlayerNum = playerNum;
         return touchInfo;
     }
 
@@ -75,6 +84,7 @@ public class TouchInputManager : MonoSingleton<TouchInputManager> {
             touchInfo.Touch = new Touch();
             touchInfo.Touch.phase = TouchPhase.Began;
             touchInfo.Touched = true;
+            touchInfo.PlayerNum = playerNum;
             return touchInfo;
         }
         else if (Input.GetMouseButtonUp(0))
@@ -82,6 +92,7 @@ public class TouchInputManager : MonoSingleton<TouchInputManager> {
             touchInfo.Touch = new Touch();
             touchInfo.Touch.phase = TouchPhase.Ended;
             touchInfo.Touched = true;
+            touchInfo.PlayerNum = playerNum;
             return touchInfo;
         }
         else if (Input.GetMouseButton(0))
@@ -89,6 +100,7 @@ public class TouchInputManager : MonoSingleton<TouchInputManager> {
             touchInfo.Touch = new Touch();
             touchInfo.Touch.phase = TouchPhase.Moved;
             touchInfo.Touched = true;
+            touchInfo.PlayerNum = playerNum;
             return touchInfo;
         }
         touchInfo.Touched = false;

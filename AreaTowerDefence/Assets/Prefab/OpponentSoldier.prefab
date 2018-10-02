@@ -24,9 +24,9 @@ GameObject:
   - component: {fileID: 136726698846546912}
   - component: {fileID: 195261706708392894}
   - component: {fileID: 114395373899553732}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: OpponentSoldier
-  m_TagString: Untagged
+  m_TagString: Actor
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -97,7 +97,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 80978b1f4be8e6c4182b924a7896f390, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ownPlayerNum: 1
+  playerNumber: 1
   instantiateCost: 20
 --- !u!136 &136726698846546912
 CapsuleCollider:
