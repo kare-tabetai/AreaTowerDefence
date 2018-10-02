@@ -73,6 +73,14 @@ public class PlayerActorController : ActorController {
     {
         const float OffsetY = 0.05f;//重なりを防ぐため
 
+        var instantiateActor = DraggingActor.GetComponent<Actor>();
+
+        //予算が足りなければ帰る
+        if (!costCounter.Pay(instantiateActor.InstantiateCost))
+        {
+            return;
+        }
+
         var instantiatedObject = Instantiate(DraggingActor);
         var pos = instantiatePosition;
         pos.y = OffsetY;

@@ -12,5 +12,7 @@ public abstract class ActorController : MonoBehaviour {
     [SerializeField]
     public Transform OwnTower;
     [SerializeField]
+    protected CostCounter costCounter;
+    [SerializeField]
     public Color ThemeColor;
 }

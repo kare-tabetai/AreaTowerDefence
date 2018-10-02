@@ -8,7 +8,7 @@ public class InstantiatableArea : Actor{
     {
 		
 	}
-
+    
     void Update () {
 		
 	}
