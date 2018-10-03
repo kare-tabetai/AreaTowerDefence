@@ -9,6 +9,13 @@ using UnityEngine;
 /// </summary>
 public class ChildTrigger : MonoBehaviour {
 
+    [SerializeField]
+    string onTriggerEnterCallMethod = "OnTriggerEnter";
+    [SerializeField]
+    string onTriggerStayCallMethod = "OnTriggerStay";
+    [SerializeField]
+    string onTriggerExitCallMethod = "OnTriggerExit";
+
     MonoBehaviour[] parentMonoBehaviour;
 	void Start () {
         parentMonoBehaviour = transform.GetComponentsInParent<MonoBehaviour>();
@@ -18,7 +25,7 @@ public class ChildTrigger : MonoBehaviour {
     {
         foreach(var monoBehaviour in parentMonoBehaviour)
         {
-            monoBehaviour.SendMessage("OnTriggerEnter", other,SendMessageOptions.DontRequireReceiver);
+            monoBehaviour.SendMessage(onTriggerEnterCallMethod, other,SendMessageOptions.DontRequireReceiver);
         }
     }
 
@@ -26,7 +33,7 @@ public class ChildTrigger : MonoBehaviour {
     {
         foreach (var monoBehaviour in parentMonoBehaviour)
         {
-            monoBehaviour.SendMessage("OnTriggerStay", other, SendMessageOptions.DontRequireReceiver);
+            monoBehaviour.SendMessage(onTriggerStayCallMethod, other, SendMessageOptions.DontRequireReceiver);
         }
     }
 
@@ -34,7 +41,7 @@ public class ChildTrigger : MonoBehaviour {
     {
         foreach (var monoBehaviour in parentMonoBehaviour)
         {
-            monoBehaviour.SendMessage("OnTriggerExit", other, SendMessageOptions.DontRequireReceiver);
+            monoBehaviour.SendMessage(onTriggerExitCallMethod, other, SendMessageOptions.DontRequireReceiver);
         }
     }
 }

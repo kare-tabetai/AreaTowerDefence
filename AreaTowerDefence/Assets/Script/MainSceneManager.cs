@@ -11,7 +11,13 @@ public class MainSceneManager : MonoSingleton<MainSceneManager>
         get { return controllers; }
         private set { controllers = value; }
     }
-    
+    [SerializeField]
+    Transform actoresNode;
+    public Transform Actornode
+    {
+        get { return actoresNode; }
+    }
+
 	void Start () {
         Debug.Assert(2 <= controllers.Length);
         for(int i = 0; i < Controllers.Length; i++)
@@ -30,14 +36,14 @@ public class MainSceneManager : MonoSingleton<MainSceneManager>
     public Transform GetNearestOtherPlayerTower(int playerNum,Vector3 comparedPosition)
     {
         Transform nearestTower = null;
-        float sqrDist = float.PositiveInfinity;
+        float nearestSqrDist = Mathf.Infinity;
         for(int pNum = 0; pNum < controllers.Length; pNum++)
         {
             if (pNum == playerNum) { continue; }
-            float dist = Vector3.SqrMagnitude(controllers[pNum].OwnTower.position - comparedPosition);
-            if (dist < sqrDist)
+            float sqrDist = Vector3.SqrMagnitude(controllers[pNum].OwnTower.position - comparedPosition);
+            if (sqrDist < nearestSqrDist)
             {
-                sqrDist = dist;
+                nearestSqrDist = sqrDist;
                 nearestTower = controllers[pNum].OwnTower;
             }
         }

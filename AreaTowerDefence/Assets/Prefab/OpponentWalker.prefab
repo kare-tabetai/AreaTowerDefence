@@ -99,7 +99,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playerNumber: 1
   instantiateCost: 100
-  instantiatableArea: {fileID: 0}
+  instantiatableArea: {fileID: 1496121370521220, guid: 998691390c8849d47a5f3cb5fa4aeca5,
+    type: 2}
 --- !u!136 &136726698846546912
 CapsuleCollider:
   m_ObjectHideFlags: 1
