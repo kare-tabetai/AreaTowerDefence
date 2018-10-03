@@ -13,7 +13,7 @@ public class MainSceneManager : MonoSingleton<MainSceneManager>
     }
     [SerializeField]
     Transform actoresNode;
-    public Transform Actornode
+    public Transform ActorNode
     {
         get { return actoresNode; }
     }

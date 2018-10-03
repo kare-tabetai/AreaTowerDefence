@@ -33,7 +33,7 @@ public class AiActorController : ActorController
             var unitComponent = unit.GetComponent<Unit>();
             if (costCounter.Pay(unitComponent.InstantiateCost))
             {
-                var instantiatedObject = Instantiate(unit);
+                var instantiatedObject = Instantiate(unit,MainSceneManager.Instance.ActorNode);
                 var pos = OwnTower.position;
                 pos.y = OffsetY;
                 instantiatedObject.transform.position = pos;

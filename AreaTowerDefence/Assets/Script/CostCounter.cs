@@ -37,7 +37,7 @@ public class CostCounter : MonoBehaviour {
     {
         if (count < cost)
         {
-            print("予算不足");
+            //print("予算不足");
             return false;
         }
         count -= cost;

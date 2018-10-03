@@ -10,15 +10,16 @@ using UnityEngine;
 public class ChildTrigger : MonoBehaviour {
 
     [SerializeField]
+    MonoBehaviour[] parentMonoBehaviour;
+    [SerializeField]
     string onTriggerEnterCallMethod = "OnTriggerEnter";
     [SerializeField]
     string onTriggerStayCallMethod = "OnTriggerStay";
     [SerializeField]
     string onTriggerExitCallMethod = "OnTriggerExit";
 
-    MonoBehaviour[] parentMonoBehaviour;
 	void Start () {
-        parentMonoBehaviour = transform.GetComponentsInParent<MonoBehaviour>();
+        Debug.Assert(parentMonoBehaviour.Length != 0);
 	}
 
     private void OnTriggerEnter(Collider other)

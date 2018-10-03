@@ -81,7 +81,7 @@ public class PlayerActorController : ActorController {
             return;
         }
 
-        var instantiatedObject = Instantiate(DraggingUnit,MainSceneManager.Instance.Actornode);
+        var instantiatedObject = Instantiate(DraggingUnit,MainSceneManager.Instance.ActorNode);
         var pos = instantiatePosition;
         pos.y = OffsetY;
         instantiatedObject.transform.position = pos;

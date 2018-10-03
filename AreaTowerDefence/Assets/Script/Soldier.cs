@@ -19,6 +19,8 @@ public class Soldier : Unit {
     {
         agent = GetComponent<NavMeshAgent>();
         targetTower = MainSceneManager.Instance.GetNearestOtherPlayerTower(PlayerNumber,transform.position);
+        agent.SetDestination(targetTower.position);
+
     }
 
     void Update()
@@ -27,7 +29,6 @@ public class Soldier : Unit {
         switch (state)
         {
             case SoldierState.Progress:
-                agent.SetDestination(targetTower.position);
                 break;
 
             case SoldierState.Fight:
@@ -38,11 +39,14 @@ public class Soldier : Unit {
 
     void StateCheck()
     {
+        unitsInRange.RemoveAll(item => item == null);//nullを削除
         if (unitsInRange.Count == 0)
         {
             state = SoldierState.Progress;
             agent.isStopped = false;
-        }else
+            agent.SetDestination(targetTower.position);
+        }
+        else
         {
             state = SoldierState.Fight;
         }
@@ -50,7 +54,7 @@ public class Soldier : Unit {
 
     void Fight()
     {
-        const float attackDist = 0.5f;//これ以内の距離ならAttack
+        const float attackDist = 1.5f;//これ以内の距離ならAttack
 
         Unit nearestUnit;
         var sqrDist = GetNearestUnit(out nearestUnit);
@@ -71,6 +75,7 @@ public class Soldier : Unit {
     {
         const float AttackRag = 1.0f;
         const int AttackPower = 80;
+        print("attack");
 
         attackTimer += Time.deltaTime;
         if (AttackRag <= attackTimer)
@@ -86,7 +91,6 @@ public class Soldier : Unit {
 
         float nearestSqrDist = Mathf.Infinity;
         nearestUnit = null;
-        unitsInRange.RemoveAll(item => item == null);//nullを削除
         foreach (var unit in unitsInRange)
         {
             Debug.Assert(unit.PlayerNumber != PlayerNumber);
@@ -98,16 +102,19 @@ public class Soldier : Unit {
             }
         }
         Debug.Assert(nearestUnit != null);
+        Debug.Assert(nearestUnit.gameObject != null);
         Debug.Assert(nearestSqrDist != Mathf.Infinity);
         return nearestSqrDist;
     }
 
     private void OnTriggerEnter(Collider other)
     {
+            print("hit");
         if (other.tag == "Actor")
         {
-            var unit = GetComponent<Unit>();
-            if (!unit) { return; }
+            print("actor");
+            var unit = other.GetComponent<Unit>();
+            if (unit==null) { return; }
             if (unit.PlayerNumber == PlayerNumber) { return; }
             unitsInRange.Add(unit);
         }
@@ -117,8 +124,8 @@ public class Soldier : Unit {
     {
         if (other.tag == "Actor")
         {
-            var unit = GetComponent<Unit>();
-            if (!unit) { return; }
+            var unit = other.GetComponent<Unit>();
+            if (unit == null) { return; }
             if (unit.PlayerNumber == PlayerNumber) { return; }
             unitsInRange.Remove(unit);
         }

@@ -23,7 +23,8 @@ GameObject:
   - component: {fileID: 23460321488098568}
   - component: {fileID: 135897882005234952}
   - component: {fileID: 114585320253759054}
-  m_Layer: 0
+  - component: {fileID: 54923164242685854}
+  m_Layer: 11
   m_Name: SerchArea
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -41,7 +42,6 @@ GameObject:
   - component: {fileID: 33514613737401612}
   - component: {fileID: 23255831826214592}
   - component: {fileID: 195119562876150512}
-  - component: {fileID: 54791251023273406}
   - component: {fileID: 136506387417946326}
   - component: {fileID: 114003631561833364}
   m_Layer: 10
@@ -162,12 +162,12 @@ MeshFilter:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1292142972357336}
   m_Mesh: {fileID: 10207, guid: 0000000000000000e000000000000000, type: 0}
---- !u!54 &54791251023273406
+--- !u!54 &54923164242685854
 Rigidbody:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1441464655388796}
+  m_GameObject: {fileID: 1292142972357336}
   serializedVersion: 2
   m_Mass: 1
   m_Drag: 0
@@ -202,6 +202,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5f64b88300288b148a00990777e9b4c7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  parentMonoBehaviour:
+  - {fileID: 114003631561833364}
   onTriggerEnterCallMethod: OnTriggerEnter
   onTriggerStayCallMethod: OnTriggerStay
   onTriggerExitCallMethod: OnTriggerExit
@@ -224,7 +226,7 @@ CapsuleCollider:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1441464655388796}
   m_Material: {fileID: 0}
-  m_IsTrigger: 1
+  m_IsTrigger: 0
   m_Enabled: 1
   m_Radius: 0.5
   m_Height: 2
@@ -239,7 +241,7 @@ NavMeshAgent:
   m_Enabled: 1
   m_AgentTypeID: 0
   m_Radius: 0.5
-  m_Speed: 3.5
+  m_Speed: 2
   m_Acceleration: 8
   avoidancePriority: 50
   m_AngularSpeed: 120
