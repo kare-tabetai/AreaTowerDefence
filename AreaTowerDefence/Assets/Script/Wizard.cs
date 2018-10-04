@@ -3,24 +3,25 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class Soldier : Unit {
-
-    enum SoldierState
+public class Wizard : Unit
+{
+    enum WizardState
     {
         Progress,
         Fight,
     }
 
+    [SerializeField]
+    GameObject magicBullet;
+
     List<Unit> unitInRange = new List<Unit>();
-    SoldierState state;
+    WizardState state;
     Transform targetTower;
     NavMeshAgent agent;
-    void Start()
-    {
+    void Start () {
         agent = GetComponent<NavMeshAgent>();
-        targetTower = MainSceneManager.Instance.GetNearestOtherPlayerTower(PlayerNumber,transform.position);
+        targetTower = MainSceneManager.Instance.GetNearestOtherPlayerTower(PlayerNumber, transform.position);
         agent.SetDestination(targetTower.position);
-
     }
 
     void Update()
@@ -28,10 +29,10 @@ public class Soldier : Unit {
         StateCheck();
         switch (state)
         {
-            case SoldierState.Progress:
+            case WizardState.Progress:
                 break;
 
-            case SoldierState.Fight:
+            case WizardState.Fight:
                 Fight();
                 break;
         }
@@ -42,57 +43,48 @@ public class Soldier : Unit {
         unitInRange.RemoveAll(item => item == null);//nullを削除
         if (unitInRange.Count == 0)
         {
-            state = SoldierState.Progress;
+            state = WizardState.Progress;
             agent.isStopped = false;
             agent.SetDestination(targetTower.position);
         }
         else
         {
-            state = SoldierState.Fight;
+            state = WizardState.Fight;
         }
     }
 
     void Fight()
     {
-        const float attackDist = 1.5f;//これ以内の距離ならAttack
-
         Unit nearestUnit;
-        var sqrDist = GetNearestUnit(this, unitInRange, out nearestUnit);
-        if(sqrDist <= attackDist * attackDist)
-        {
-            agent.isStopped = true;
-            Attack(nearestUnit);
-        }
-        else
-        {
-            agent.isStopped = false;
-            agent.SetDestination(nearestUnit.transform.position);
-        }
+        var sqrDist = GetNearestUnit(this,unitInRange,out nearestUnit);
+        agent.isStopped = true;
+        Attack(nearestUnit);
     }
 
     float attackTimer = 0;
     void Attack(Unit attackTarget)
     {
         const float AttackRag = 1.0f;
-        const int AttackPower = 80;
         print("attack");
 
         attackTimer += Time.deltaTime;
         if (AttackRag <= attackTimer)
         {
             attackTimer = 0f;
-            attackTarget.Damage(AttackPower, this);
+            var bullet = Instantiate(magicBullet,MainSceneManager.Instance.ActorNode).GetComponent<MagicBullet>();
+            bullet.transform.position = transform.position;
+            bullet.Initialize(PlayerNumber, attackTarget.transform);
         }
     }
 
     private void OnTriggerEnter(Collider other)
     {
-            print("hit");
+        print("hit");
         if (other.tag == "Actor")
         {
             print("actor");
             var unit = other.GetComponent<Unit>();
-            if (unit==null) { return; }
+            if (unit == null) { return; }
             if (unit.PlayerNumber == PlayerNumber) { return; }
             unitInRange.Add(unit);
         }

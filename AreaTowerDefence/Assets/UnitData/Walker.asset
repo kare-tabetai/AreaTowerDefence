@@ -1,0 +1,18 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 26d282b2333554a4d8953402a1bfa650, type: 3}
+  m_Name: Walker
+  m_EditorClassIdentifier: 
+  UnitName: "\u30A6\u30A9\u30FC\u30AB\u30FC"
+  InstantiateUnit: {fileID: 1667252014080600, guid: 30334178e379c7841bede5a70fe945cb,
+    type: 2}
+  DraggingUnit: {fileID: 1325626217997762, guid: 8b1a1bcd330623f4aac58e16f2068840,
+    type: 2}

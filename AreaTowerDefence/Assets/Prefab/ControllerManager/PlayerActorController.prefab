@@ -51,7 +51,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fe54908204601c24aabff93baf2f6e85, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  PlayerNumber: 0
+  playerNumber: 0
   OwnTower: {fileID: 0}
+  costCounter: {fileID: 0}
   ThemeColor: {r: 1, g: 0.27843142, b: 0.27843142, a: 1}
-  DraggingActor: {fileID: 0}
+  DraggingUnit: {fileID: 0}

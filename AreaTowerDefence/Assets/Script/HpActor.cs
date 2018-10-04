@@ -27,6 +27,16 @@ public abstract class HpActor : Actor {
         print("damage");
     }
 
+    public virtual void Damage(int damage, Actor unit)
+    {
+        hp -= damage;
+        if (hp <= 0)
+        {
+            Die();
+        }
+        print("damage");
+    }
+
     protected virtual void Die()
     {
         Destroy(gameObject);

@@ -12,4 +12,26 @@ public abstract class Unit : HpActor {
     {
         get { return instantiateCost; }
     }
+
+    protected static float GetNearestUnit(Unit self,List<Unit> unitList,out Unit nearestUnit)
+    {
+        Debug.Assert(unitList.Count != 0);
+
+        float nearestSqrDist = Mathf.Infinity;
+        nearestUnit = null;
+        foreach (var hpActor in unitList)
+        {
+            Debug.Assert(hpActor.PlayerNumber != self.PlayerNumber);
+            float sqrDist = Vector3.SqrMagnitude(hpActor.transform.position - self.transform.position);
+            if (sqrDist < nearestSqrDist)
+            {
+                nearestSqrDist = sqrDist;
+                nearestUnit = hpActor;
+            }
+        }
+        Debug.Assert(nearestUnit != null);
+        Debug.Assert(nearestUnit.gameObject != null);
+        Debug.Assert(nearestSqrDist != Mathf.Infinity);
+        return nearestSqrDist;
+    }
 }
