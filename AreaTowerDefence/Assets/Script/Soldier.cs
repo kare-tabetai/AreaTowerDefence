@@ -11,7 +11,7 @@ public class Soldier : Unit {
         Fight,
     }
 
-    List<Unit> unitsInRange = new List<Unit>();
+    List<HpActor> hpActorsInRange = new List<HpActor>();
     SoldierState state;
     Transform targetTower;
     NavMeshAgent agent;
@@ -39,8 +39,8 @@ public class Soldier : Unit {
 
     void StateCheck()
     {
-        unitsInRange.RemoveAll(item => item == null);//nullを削除
-        if (unitsInRange.Count == 0)
+        hpActorsInRange.RemoveAll(item => item == null);//nullを削除
+        if (hpActorsInRange.Count == 0)
         {
             state = SoldierState.Progress;
             agent.isStopped = false;
@@ -56,7 +56,7 @@ public class Soldier : Unit {
     {
         const float attackDist = 1.5f;//これ以内の距離ならAttack
 
-        Unit nearestUnit;
+        HpActor nearestUnit;
         var sqrDist = GetNearestUnit(out nearestUnit);
         if(sqrDist <= attackDist * attackDist)
         {
@@ -71,7 +71,7 @@ public class Soldier : Unit {
     }
 
     float attackTimer = 0;
-    void Attack(Unit attackTarget)
+    void Attack(HpActor attackTarget)
     {
         const float AttackRag = 1.0f;
         const int AttackPower = 80;
@@ -85,20 +85,20 @@ public class Soldier : Unit {
         }
     }
 
-    float GetNearestUnit(out Unit nearestUnit)
+    float GetNearestUnit(out HpActor nearestUnit)
     {
-        Debug.Assert(unitsInRange.Count != 0);
+        Debug.Assert(hpActorsInRange.Count != 0);
 
         float nearestSqrDist = Mathf.Infinity;
         nearestUnit = null;
-        foreach (var unit in unitsInRange)
+        foreach (var hpActor in hpActorsInRange)
         {
-            Debug.Assert(unit.PlayerNumber != PlayerNumber);
-            float sqrDist = Vector3.SqrMagnitude(unit.transform.position - transform.position);
+            Debug.Assert(hpActor.PlayerNumber != PlayerNumber);
+            float sqrDist = Vector3.SqrMagnitude(hpActor.transform.position - transform.position);
             if (sqrDist < nearestSqrDist)
             {
                 nearestSqrDist = sqrDist;
-                nearestUnit = unit;
+                nearestUnit = hpActor;
             }
         }
         Debug.Assert(nearestUnit != null);
@@ -116,7 +116,7 @@ public class Soldier : Unit {
             var unit = other.GetComponent<Unit>();
             if (unit==null) { return; }
             if (unit.PlayerNumber == PlayerNumber) { return; }
-            unitsInRange.Add(unit);
+            hpActorsInRange.Add(unit);
         }
     }
 
@@ -127,7 +127,7 @@ public class Soldier : Unit {
             var unit = other.GetComponent<Unit>();
             if (unit == null) { return; }
             if (unit.PlayerNumber == PlayerNumber) { return; }
-            unitsInRange.Remove(unit);
+            hpActorsInRange.Remove(unit);
         }
     }
 
