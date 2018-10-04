@@ -34,7 +34,7 @@ public class PlayerActorController : ActorController {
 
         if (touchInfo.RayCastInfo.collider.tag == "Stage")
         {
-            //PlayerTower[0].position = touchInfo.RayCastInfo.point;
+
         }
 
         if (touchInfo.Touch.phase == TouchPhase.Began)

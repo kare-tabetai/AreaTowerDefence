@@ -1534,7 +1534,7 @@ GameObject:
   - component: {fileID: 581805917}
   m_Layer: 0
   m_Name: Tower
-  m_TagString: Untagged
+  m_TagString: Actor
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -5457,7 +5457,7 @@ MonoBehaviour:
       m_PersistentCalls:
         m_Calls:
         - m_Target: {fileID: 889878074}
-          m_MethodName: InstantiatableActorButtonBeginDrag
+          m_MethodName: InstantiatableUnitButtonBeginDrag
           m_Mode: 2
           m_Arguments:
             m_ObjectArgument: {fileID: 1441464655388796, guid: cdacb83f596c32f4098a45516989af3f,
@@ -6637,7 +6637,7 @@ MonoBehaviour:
       m_PersistentCalls:
         m_Calls:
         - m_Target: {fileID: 889878074}
-          m_MethodName: InstantiatableActorButtonBeginDrag
+          m_MethodName: InstantiatableUnitButtonBeginDrag
           m_Mode: 2
           m_Arguments:
             m_ObjectArgument: {fileID: 1667252014080600, guid: 30334178e379c7841bede5a70fe945cb,
