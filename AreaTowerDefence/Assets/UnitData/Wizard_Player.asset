@@ -9,7 +9,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 26d282b2333554a4d8953402a1bfa650, type: 3}
-  m_Name: Wizard
+  m_Name: Wizard_Player
   m_EditorClassIdentifier: 
   UnitName: "\u30A6\u30A3\u30B6\u30FC\u30C9"
   InstantiateUnit: {fileID: 1923390185139340, guid: e451f3418c1774b49ad729de28606238,

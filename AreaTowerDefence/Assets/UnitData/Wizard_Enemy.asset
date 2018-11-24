@@ -1,0 +1,18 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 26d282b2333554a4d8953402a1bfa650, type: 3}
+  m_Name: Wizard_Enemy
+  m_EditorClassIdentifier: 
+  UnitName: "\u30A6\u30A3\u30B6\u30FC\u30C9"
+  InstantiateUnit: {fileID: 1061400314432720, guid: de5ab7aeb4f5bcf4391c91aed5be33d6,
+    type: 2}
+  DraggingUnit: {fileID: 0}
+  InstantiateCost: 30
