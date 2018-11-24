@@ -7,7 +7,7 @@ using UnityEngine;
 /// PlayerNumberが必要なもの
 /// </summary>
 public abstract class Actor : MonoBehaviour {
-    [SerializeField]
+    [SerializeField,Disable]
     int playerNumber;
     public int PlayerNumber
     {
