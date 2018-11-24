@@ -10,10 +10,10 @@ public class PlayerCostUI : MonoBehaviour {
     TextMeshProUGUI text;
 	void Start () {
         text = GetComponent<TextMeshProUGUI>();
-        text.text = counter.Count.ToString();
+        text.text = counter.CountInt.ToString();
 	}
 	
 	void Update () {
-        text.text = counter.Count.ToString();
+        text.text = counter.CountInt.ToString();
     }
 }

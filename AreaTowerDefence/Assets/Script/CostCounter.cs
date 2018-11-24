@@ -14,6 +14,10 @@ public class CostCounter : MonoBehaviour {
         get { return count; }
         private set { count = value; }
     }
+    public int CountInt
+    {
+        get { return (int)count; }
+    }
 
     [SerializeField]
     int interestRate = 1;
