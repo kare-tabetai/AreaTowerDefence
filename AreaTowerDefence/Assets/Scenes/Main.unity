@@ -6520,16 +6520,6 @@ Prefab:
   m_Modification:
     m_TransformParent: {fileID: 128984658}
     m_Modifications:
-    - target: {fileID: 114535610303210776, guid: ba4d71026aa53364993395c61efa220f,
-        type: 2}
-      propertyPath: units.Array.size
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 114535610303210776, guid: ba4d71026aa53364993395c61efa220f,
-        type: 2}
-      propertyPath: actors.Array.size
-      value: 2
-      objectReference: {fileID: 0}
     - target: {fileID: 4922689590575750, guid: ba4d71026aa53364993395c61efa220f, type: 2}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -6572,39 +6562,6 @@ Prefab:
       propertyPath: costCounter
       value: 
       objectReference: {fileID: 753707960}
-    - target: {fileID: 114535610303210776, guid: ba4d71026aa53364993395c61efa220f,
-        type: 2}
-      propertyPath: actors.Array.data[0]
-      value: 
-      objectReference: {fileID: 1570103729886868, guid: 42ae9ba6ce5772e44bf255a62dbb26a1,
-        type: 2}
-    - target: {fileID: 114535610303210776, guid: ba4d71026aa53364993395c61efa220f,
-        type: 2}
-      propertyPath: actors.Array.data[1]
-      value: 
-      objectReference: {fileID: 1570103729886868, guid: a01195914a5db064fbb674bfefd4495b,
-        type: 2}
-    - target: {fileID: 1496690409983172, guid: ba4d71026aa53364993395c61efa220f, type: 2}
-      propertyPath: m_TagString
-      value: Actor
-      objectReference: {fileID: 0}
-    - target: {fileID: 114535610303210776, guid: ba4d71026aa53364993395c61efa220f,
-        type: 2}
-      propertyPath: units.Array.data[1]
-      value: 
-      objectReference: {fileID: 1570103729886868, guid: a01195914a5db064fbb674bfefd4495b,
-        type: 2}
-    - target: {fileID: 114535610303210776, guid: ba4d71026aa53364993395c61efa220f,
-        type: 2}
-      propertyPath: units.Array.data[0]
-      value: 
-      objectReference: {fileID: 1570103729886868, guid: 42ae9ba6ce5772e44bf255a62dbb26a1,
-        type: 2}
-    - target: {fileID: 114535610303210776, guid: ba4d71026aa53364993395c61efa220f,
-        type: 2}
-      propertyPath: playerNumber
-      value: 1
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: ba4d71026aa53364993395c61efa220f, type: 2}
   m_IsPrefabParent: 0

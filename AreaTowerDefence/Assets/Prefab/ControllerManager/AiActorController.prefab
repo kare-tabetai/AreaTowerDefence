@@ -22,7 +22,7 @@ GameObject:
   - component: {fileID: 114535610303210776}
   m_Layer: 0
   m_Name: AiActorController
-  m_TagString: Untagged
+  m_TagString: Actor
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -51,9 +51,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d7896a32893061542b232ce7978fa07f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerNumber: 0
+  playerNumber: 1
   OwnTower: {fileID: 0}
   costCounter: {fileID: 0}
   ThemeColor: {r: 0.38666677, g: 0.27843142, b: 1, a: 1}
-  units: []
+  units:
+  - {fileID: 11400000, guid: 5bb27dc9bf63354489ce133ac61b01a5, type: 2}
+  - {fileID: 11400000, guid: 4e6016257e4191148aa976b662c3a959, type: 2}
+  - {fileID: 11400000, guid: 803d0d96a567d214dbf65682e5851627, type: 2}
   instantiateRug: 2

@@ -16,3 +16,4 @@ MonoBehaviour:
     type: 2}
   DraggingUnit: {fileID: 1325626217997762, guid: e8f9ea80445f34e41afcf1a9a82cf6bb,
     type: 2}
+  InstantiateCost: 50

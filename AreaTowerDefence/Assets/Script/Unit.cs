@@ -6,12 +6,6 @@ using UnityEngine;
 /// 動く駒を作るときはこれを継承
 /// </summary>
 public abstract class Unit : HpActor {
-    [SerializeField]
-    int instantiateCost = 100;
-    public int InstantiateCost
-    {
-        get { return instantiateCost; }
-    }
 
     protected static float GetNearestUnit(Unit self,List<Unit> unitList,out Unit nearestUnit)
     {

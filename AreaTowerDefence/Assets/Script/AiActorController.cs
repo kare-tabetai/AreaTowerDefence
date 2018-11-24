@@ -5,7 +5,7 @@ using UnityEngine;
 public class AiActorController : ActorController
 {
     [SerializeField,Tooltip("生成するアクター,添え字の順に優先して呼ばれる")]
-    GameObject[] units;
+    UnitData[] units;
 
     [SerializeField]
     float instantiateRug = 2f;
@@ -30,10 +30,9 @@ public class AiActorController : ActorController
 
         foreach (var unit in units)
         {
-            var unitComponent = unit.GetComponent<Unit>();
-            if (costCounter.Pay(unitComponent.InstantiateCost))
+            if (costCounter.Pay(unit.InstantiateCost))
             {
-                var instantiatedObject = Instantiate(unit,MainSceneManager.Instance.ActorNode);
+                var instantiatedObject = Instantiate(unit.InstantiateUnit, MainSceneManager.Instance.ActorNode);
                 var pos = OwnTower.position;
                 pos.y = OffsetY;
                 instantiatedObject.transform.position = pos;
