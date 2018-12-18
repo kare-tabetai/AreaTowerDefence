@@ -18,10 +18,13 @@ public class Wizard : Unit
     WizardState state;
     Transform targetTower;
     NavMeshAgent agent;
+    Animator animator;
     void Start () {
         agent = GetComponent<NavMeshAgent>();
+        animator = GetComponentInChildren<Animator>();
         targetTower = MainSceneManager.Instance.GetNearestOtherPlayerTower(PlayerNumber, transform.position);
         agent.SetDestination(targetTower.position);
+        animator.SetFloat("Velocity", agent.speed);
     }
 
     void Update()
@@ -43,13 +46,17 @@ public class Wizard : Unit
         unitInRange.RemoveAll(item => item == null);//nullを削除
         if (unitInRange.Count == 0)
         {
+            if (state == WizardState.Progress) { return; }
             state = WizardState.Progress;
             agent.isStopped = false;
             agent.SetDestination(targetTower.position);
         }
         else
         {
+            if (state == WizardState.Fight) { return; }
             state = WizardState.Fight;
+            agent.isStopped = true;
+            animator.SetTrigger("Attack");
         }
     }
 
@@ -57,7 +64,6 @@ public class Wizard : Unit
     {
         Unit nearestUnit;
         var sqrDist = GetNearestUnit(this,unitInRange,out nearestUnit);
-        agent.isStopped = true;
         Attack(nearestUnit);
     }
 
@@ -65,6 +71,7 @@ public class Wizard : Unit
     void Attack(Unit attackTarget)
     {
         const float AttackRag = 1.0f;
+        const float MagicBulletOffsetY = 0.5f;
         print("attack");
 
         attackTimer += Time.deltaTime;
@@ -72,7 +79,9 @@ public class Wizard : Unit
         {
             attackTimer = 0f;
             var bullet = Instantiate(magicBullet,MainSceneManager.Instance.ActorNode).GetComponent<MagicBullet>();
-            bullet.transform.position = transform.position;
+            var instPos = transform.position;
+            instPos.y += MagicBulletOffsetY;
+            bullet.transform.position = instPos;
             bullet.Initialize(PlayerNumber, attackTarget.transform);
         }
     }

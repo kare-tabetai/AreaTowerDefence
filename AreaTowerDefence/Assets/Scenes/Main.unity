@@ -5246,7 +5246,7 @@ Mesh:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
-  m_Name: pb_Mesh4896
+  m_Name: pb_Mesh36174
   serializedVersion: 8
   m_SubMeshes:
   - serializedVersion: 2
@@ -6443,6 +6443,29 @@ Prefab:
       propertyPath: instantiateRug
       value: 5
       objectReference: {fileID: 0}
+    - target: {fileID: 114535610303210776, guid: ba4d71026aa53364993395c61efa220f,
+        type: 2}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114535610303210776, guid: ba4d71026aa53364993395c61efa220f,
+        type: 2}
+      propertyPath: units.Array.data[0]
+      value: 
+      objectReference: {fileID: 11400000, guid: 5bb27dc9bf63354489ce133ac61b01a5,
+        type: 2}
+    - target: {fileID: 114535610303210776, guid: ba4d71026aa53364993395c61efa220f,
+        type: 2}
+      propertyPath: units.Array.data[1]
+      value: 
+      objectReference: {fileID: 11400000, guid: 803d0d96a567d214dbf65682e5851627,
+        type: 2}
+    - target: {fileID: 114535610303210776, guid: ba4d71026aa53364993395c61efa220f,
+        type: 2}
+      propertyPath: units.Array.data[2]
+      value: 
+      objectReference: {fileID: 11400000, guid: 4e6016257e4191148aa976b662c3a959,
+        type: 2}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: ba4d71026aa53364993395c61efa220f, type: 2}
   m_IsPrefabParent: 0

@@ -15,12 +15,14 @@ public class Soldier : Unit {
     SoldierState state;
     Transform targetTower;
     NavMeshAgent agent;
+    Animator animator;
     void Start()
     {
         agent = GetComponent<NavMeshAgent>();
+        animator = GetComponentInChildren<Animator>();
         targetTower = MainSceneManager.Instance.GetNearestOtherPlayerTower(PlayerNumber,transform.position);
         agent.SetDestination(targetTower.position);
-
+        animator.SetFloat("Velocity", agent.speed);
     }
 
     void Update()
@@ -42,13 +44,18 @@ public class Soldier : Unit {
         unitInRange.RemoveAll(item => item == null);//nullを削除
         if (unitInRange.Count == 0)
         {
+            if(state == SoldierState.Progress) { return; }
             state = SoldierState.Progress;
             agent.isStopped = false;
             agent.SetDestination(targetTower.position);
+            animator.SetFloat("Velocity", agent.speed);
         }
         else
         {
+            if (state == SoldierState.Fight) { return; }
             state = SoldierState.Fight;
+            animator.SetTrigger("Attack");
+            agent.isStopped = true;
         }
     }
 
@@ -60,13 +67,13 @@ public class Soldier : Unit {
         var sqrDist = GetNearestUnit(this, unitInRange, out nearestUnit);
         if(sqrDist <= attackDist * attackDist)
         {
-            agent.isStopped = true;
             Attack(nearestUnit);
-        }
-        else
+        }else
         {
+            state = SoldierState.Progress;
             agent.isStopped = false;
-            agent.SetDestination(nearestUnit.transform.position);
+            agent.SetDestination(targetTower.position);
+            animator.SetFloat("Velocity", agent.speed);
         }
     }
 
