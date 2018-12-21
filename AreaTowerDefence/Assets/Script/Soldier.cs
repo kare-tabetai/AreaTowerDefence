@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
+using System.Linq;
 
 public class Soldier : Unit {
 
@@ -54,21 +55,19 @@ public class Soldier : Unit {
         {
             if (state == SoldierState.Fight) { return; }
             state = SoldierState.Fight;
-            animator.SetTrigger("Attack");
             agent.isStopped = true;
         }
     }
 
     void Fight()
     {
-        const float attackDist = 1.5f;//これ以内の距離ならAttack
-
         Unit nearestUnit;
         var sqrDist = GetNearestUnit(this, unitInRange, out nearestUnit);
-        if(sqrDist <= attackDist * attackDist)
+        if(unitInRange.Any(item=>item==nearestUnit))
         {
             Attack(nearestUnit);
-        }else
+        }
+        else
         {
             state = SoldierState.Progress;
             agent.isStopped = false;
@@ -89,6 +88,7 @@ public class Soldier : Unit {
         {
             attackTimer = 0f;
             attackTarget.Damage(AttackPower, this);
+            animator.SetTrigger("Attack");
         }
     }
 
