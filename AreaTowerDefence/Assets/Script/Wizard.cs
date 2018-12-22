@@ -15,6 +15,7 @@ public class Wizard : Unit
     GameObject magicBullet;
 
     List<Unit> unitInRange = new List<Unit>();
+    [Disable, SerializeField]
     WizardState state;
     Transform targetTower;
     NavMeshAgent agent;
@@ -50,13 +51,15 @@ public class Wizard : Unit
             state = WizardState.Progress;
             agent.isStopped = false;
             agent.SetDestination(targetTower.position);
+            animator.SetBool("Attack",false);
+            animator.SetFloat("Velocity", agent.speed);
         }
         else
         {
             if (state == WizardState.Fight) { return; }
             state = WizardState.Fight;
             agent.isStopped = true;
-            animator.SetTrigger("Attack");
+            animator.SetBool("Attack",true);
         }
     }
 
@@ -88,10 +91,8 @@ public class Wizard : Unit
 
     private void OnTriggerEnter(Collider other)
     {
-        print("hit");
         if (other.tag == "Actor")
         {
-            print("actor");
             var unit = other.GetComponent<Unit>();
             if (unit == null) { return; }
             if (unit.PlayerNumber == PlayerNumber) { return; }

@@ -13,6 +13,7 @@ public class Soldier : Unit {
     }
 
     List<Unit> unitInRange = new List<Unit>();
+    [Disable,SerializeField]
     SoldierState state;
     Transform targetTower;
     NavMeshAgent agent;
@@ -50,12 +51,14 @@ public class Soldier : Unit {
             agent.isStopped = false;
             agent.SetDestination(targetTower.position);
             animator.SetFloat("Velocity", agent.speed);
+            animator.SetBool("Attack", false);
         }
         else
         {
             if (state == SoldierState.Fight) { return; }
             state = SoldierState.Fight;
             agent.isStopped = true;
+            animator.SetBool("Attack", true);
         }
     }
 
@@ -67,13 +70,6 @@ public class Soldier : Unit {
         {
             Attack(nearestUnit);
         }
-        else
-        {
-            state = SoldierState.Progress;
-            agent.isStopped = false;
-            agent.SetDestination(targetTower.position);
-            animator.SetFloat("Velocity", agent.speed);
-        }
     }
 
     float attackTimer = 0;
@@ -81,14 +77,11 @@ public class Soldier : Unit {
     {
         const float AttackRag = 1.0f;
         const int AttackPower = 80;
-        print("attack");
-
         attackTimer += Time.deltaTime;
         if (AttackRag <= attackTimer)
         {
             attackTimer = 0f;
             attackTarget.Damage(AttackPower, this);
-            animator.SetTrigger("Attack");
         }
     }
 

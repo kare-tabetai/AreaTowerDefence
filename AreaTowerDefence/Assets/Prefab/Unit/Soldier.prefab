@@ -1627,7 +1627,7 @@ Animator:
   m_Controller: {fileID: 9100000, guid: b94d04ee5341d074a85259bf4d54f6ca, type: 2}
   m_CullingMode: 1
   m_UpdateMode: 0
-  m_ApplyRootMotion: 1
+  m_ApplyRootMotion: 0
   m_LinearVelocityBlending: 0
   m_WarningMessage: 
   m_HasTransformHierarchy: 1
@@ -1646,6 +1646,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playerNumber: 0
   hp: 100
+  state: 0
 --- !u!114 &114585320253759054
 MonoBehaviour:
   m_ObjectHideFlags: 1
