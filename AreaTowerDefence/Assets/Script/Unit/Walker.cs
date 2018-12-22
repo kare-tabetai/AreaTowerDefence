@@ -13,6 +13,7 @@ public class Walker : Unit, iTouchBegin {
     NavMeshAgent agent;
     Animator animator;
 	void Start () {
+        UnitStart();
         agent = GetComponent<NavMeshAgent>();
         animator = GetComponentInChildren<Animator>();
         target = MainSceneManager.Instance.GetNearestOtherPlayerTower(PlayerNumber,transform.position);

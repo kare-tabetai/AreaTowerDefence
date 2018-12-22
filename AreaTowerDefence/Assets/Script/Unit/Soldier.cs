@@ -2,28 +2,28 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
+using System.Linq;
 
-public class Wizard : Unit
-{
-    enum WizardState
+public class Soldier : Unit {
+
+    enum SoldierState
     {
         Progress,
         Fight,
     }
 
-    [SerializeField]
-    GameObject magicBullet;
-
     List<Unit> unitInRange = new List<Unit>();
-    [Disable, SerializeField]
-    WizardState state;
+    [Disable,SerializeField]
+    SoldierState state;
     Transform targetTower;
     NavMeshAgent agent;
     Animator animator;
-    void Start () {
+    void Start()
+    {
+        UnitStart();
         agent = GetComponent<NavMeshAgent>();
         animator = GetComponentInChildren<Animator>();
-        targetTower = MainSceneManager.Instance.GetNearestOtherPlayerTower(PlayerNumber, transform.position);
+        targetTower = MainSceneManager.Instance.GetNearestOtherPlayerTower(PlayerNumber,transform.position);
         agent.SetDestination(targetTower.position);
         animator.SetFloat("Velocity", agent.speed);
     }
@@ -31,12 +31,13 @@ public class Wizard : Unit
     void Update()
     {
         StateCheck();
+        debugText.text = state.ToString();
         switch (state)
         {
-            case WizardState.Progress:
+            case SoldierState.Progress:
                 break;
 
-            case WizardState.Fight:
+            case SoldierState.Fight:
                 Fight();
                 break;
         }
@@ -47,54 +48,53 @@ public class Wizard : Unit
         unitInRange.RemoveAll(item => item == null);//nullを削除
         if (unitInRange.Count == 0)
         {
-            if (state == WizardState.Progress) { return; }
-            state = WizardState.Progress;
+            if(state == SoldierState.Progress) { return; }
+            state = SoldierState.Progress;
             agent.isStopped = false;
             agent.SetDestination(targetTower.position);
-            animator.SetBool("Attack",false);
             animator.SetFloat("Velocity", agent.speed);
+            animator.SetBool("Attack", false);
         }
         else
         {
-            if (state == WizardState.Fight) { return; }
-            state = WizardState.Fight;
+            if (state == SoldierState.Fight) { return; }
+            state = SoldierState.Fight;
             agent.isStopped = true;
-            animator.SetBool("Attack",true);
+            animator.SetBool("Attack", true);
         }
     }
 
     void Fight()
     {
         Unit nearestUnit;
-        var sqrDist = GetNearestUnit(this,unitInRange,out nearestUnit);
-        Attack(nearestUnit);
+        var sqrDist = GetNearestUnit(this, unitInRange, out nearestUnit);
+        if(unitInRange.Any(item=>item==nearestUnit))
+        {
+            Attack(nearestUnit);
+        }
     }
 
     float attackTimer = 0;
     void Attack(Unit attackTarget)
     {
         const float AttackRag = 1.0f;
-        const float MagicBulletOffsetY = 0.5f;
-        print("attack");
-
+        const int AttackPower = 80;
         attackTimer += Time.deltaTime;
         if (AttackRag <= attackTimer)
         {
             attackTimer = 0f;
-            var bullet = Instantiate(magicBullet,MainSceneManager.Instance.ActorNode).GetComponent<MagicBullet>();
-            var instPos = transform.position;
-            instPos.y += MagicBulletOffsetY;
-            bullet.transform.position = instPos;
-            bullet.Initialize(PlayerNumber, attackTarget.transform);
+            attackTarget.Damage(AttackPower, this);
         }
     }
 
     private void OnTriggerEnter(Collider other)
     {
+            print("hit");
         if (other.tag == "Actor")
         {
+            print("actor");
             var unit = other.GetComponent<Unit>();
-            if (unit == null) { return; }
+            if (unit==null) { return; }
             if (unit.PlayerNumber == PlayerNumber) { return; }
             unitInRange.Add(unit);
         }
