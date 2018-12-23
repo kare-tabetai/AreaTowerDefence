@@ -1710,6 +1710,7 @@ MonoBehaviour:
   hp: 100
   magicBullet: {fileID: 1914101620281802, guid: 390ae8e08b0739948a3f1ae9fff92016,
     type: 2}
+  speed: 1
   state: 0
 --- !u!114 &114323032280198918
 MonoBehaviour:

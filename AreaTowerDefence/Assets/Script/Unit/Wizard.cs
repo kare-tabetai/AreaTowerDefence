@@ -1,9 +1,10 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class Wizard : Unit
+public class Wizard : Unit, iTouchEnd
 {
     enum WizardState
     {
@@ -13,6 +14,8 @@ public class Wizard : Unit
 
     [SerializeField]
     GameObject magicBullet;
+    [SerializeField]
+    float speed=5;
 
     List<Unit> unitInRange = new List<Unit>();
     [Disable, SerializeField]
@@ -107,6 +110,20 @@ public class Wizard : Unit
             if (unit == null) { return; }
             if (unit.PlayerNumber == PlayerNumber) { return; }
             unitInRange.Remove(unit);
+        }
+    }
+
+    public void TouchEnd(TouchInputManager.TouchInfo touchInfo)
+    {
+        if (agent.speed == 0)
+        {
+            agent.speed = speed;
+            animator.SetFloat("Velocity", agent.speed);
+        }
+        else
+        {
+            agent.speed = 0;
+            animator.SetFloat("Velocity", agent.speed);
         }
     }
 }
