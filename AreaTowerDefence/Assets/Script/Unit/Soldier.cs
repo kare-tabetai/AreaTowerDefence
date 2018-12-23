@@ -15,21 +15,15 @@ public class Soldier : Unit {
     List<Unit> unitInRange = new List<Unit>();
     [Disable,SerializeField]
     SoldierState state;
-    Transform targetTower;
-    NavMeshAgent agent;
-    Animator animator;
     void Start()
     {
-        UnitStart();
-        agent = GetComponent<NavMeshAgent>();
-        animator = GetComponentInChildren<Animator>();
-        targetTower = MainSceneManager.Instance.GetNearestOtherPlayerTower(PlayerNumber,transform.position);
-        agent.SetDestination(targetTower.position);
-        animator.SetFloat("Velocity", agent.speed);
+
     }
 
     void Update()
     {
+        if (!isActive) { return; }
+
         StateCheck();
         debugText.text = state.ToString();
         switch (state)
@@ -89,7 +83,9 @@ public class Soldier : Unit {
 
     private void OnTriggerEnter(Collider other)
     {
-            print("hit");
+        if (!isActive) { return; }
+
+        print("hit");
         if (other.tag == "Actor")
         {
             print("actor");
@@ -102,6 +98,8 @@ public class Soldier : Unit {
 
     private void OnTriggerExit(Collider other)
     {
+        if (!isActive) { return; }
+
         if (other.tag == "Actor")
         {
             var unit = other.GetComponent<Unit>();

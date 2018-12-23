@@ -7,7 +7,7 @@ using UnityEngine;
 public class TouchInputManager : MonoSingleton<TouchInputManager> {
 
     [SerializeField]
-    bool isTouchInput;
+    bool isTouchInput;//スマホならtrue
     [SerializeField]
     LayerMask layerMask;
     [SerializeField]
@@ -19,7 +19,7 @@ public class TouchInputManager : MonoSingleton<TouchInputManager> {
 
     public struct TouchInfo
     {
-        public bool Touched;//タッチされているか
+        public bool Touching;//タッチされているか
         public bool ObjectHit;//タッチ位置からのレイがオブジェクトに当たったか
         public Touch Touch;
         public RaycastHit RayCastInfo;
@@ -58,7 +58,7 @@ public class TouchInputManager : MonoSingleton<TouchInputManager> {
 
         if (Input.touchCount <= 0)
         {
-            touchInfo.Touched = false;
+            touchInfo.Touching = false;
             return touchInfo;
         }
         var touch = Input.GetTouch(0);
@@ -83,7 +83,7 @@ public class TouchInputManager : MonoSingleton<TouchInputManager> {
         {
             touchInfo.Touch = new Touch();
             touchInfo.Touch.phase = TouchPhase.Began;
-            touchInfo.Touched = true;
+            touchInfo.Touching = true;
             touchInfo.PlayerNum = playerNum;
             return touchInfo;
         }
@@ -91,7 +91,7 @@ public class TouchInputManager : MonoSingleton<TouchInputManager> {
         {
             touchInfo.Touch = new Touch();
             touchInfo.Touch.phase = TouchPhase.Ended;
-            touchInfo.Touched = true;
+            touchInfo.Touching = true;
             touchInfo.PlayerNum = playerNum;
             return touchInfo;
         }
@@ -99,11 +99,11 @@ public class TouchInputManager : MonoSingleton<TouchInputManager> {
         {
             touchInfo.Touch = new Touch();
             touchInfo.Touch.phase = TouchPhase.Moved;
-            touchInfo.Touched = true;
+            touchInfo.Touching = true;
             touchInfo.PlayerNum = playerNum;
             return touchInfo;
         }
-        touchInfo.Touched = false;
+        touchInfo.Touching = false;
         return touchInfo;
     }
 

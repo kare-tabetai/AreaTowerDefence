@@ -4,7 +4,8 @@ using UnityEngine;
 
 public class PlayerActorController : ActorController {
 
-    public UnitData DraggingUnitData;//ドラッグして選択中のUnit,DebugようにHideInspectorしてない
+    [SerializeField,Disable]
+    UnitData draggingUnitData;//ドラッグして選択中のUnit
 
     GameObject draggingUnit;
 
@@ -14,11 +15,12 @@ public class PlayerActorController : ActorController {
 
     public void InstantiatableUnitButtonBeginDrag(UnitData instUnit)
     {
-        Debug.Assert(DraggingUnitData == null);
+        Debug.Assert(draggingUnitData == null);
         Debug.Assert(draggingUnit == null);
 
-        DraggingUnitData = instUnit;
-        draggingUnit = Instantiate(instUnit.DraggingUnit);
+        draggingUnitData = instUnit;
+        draggingUnit = Instantiate(instUnit.InstantiateUnit);
+        draggingUnit.GetComponent<Unit>().UnitStart();
     }
 
     void Update () {
@@ -28,9 +30,11 @@ public class PlayerActorController : ActorController {
     void TouchInput()
     {
         var touchInfo = TouchInputManager.Instance.CurrentTouchInfo;
-        if (!touchInfo.Touched)
+        
+
+        if (!touchInfo.Touching)
         {
-            DraggingUnitData = null;
+            draggingUnitData = null;
             Destroy(draggingUnit);
             draggingUnit = null;
             return;
@@ -54,10 +58,12 @@ public class PlayerActorController : ActorController {
         {
             TouchBegin(touchInfo);
         }
+
         if (touchInfo.Touch.phase == TouchPhase.Ended)
         {
             TouchEnded(touchInfo);
         }
+
     }
 
     void TouchBegin(TouchInputManager.TouchInfo touchInfo)
@@ -82,20 +88,29 @@ public class PlayerActorController : ActorController {
         }
     }
 
+    /// <summary>
+    /// 現在ドラッグ中のunitを召喚する
+    /// </summary>
+    /// <param name="instantiatePosition"></param>
     void InstantiateDraggedUnit(Vector3 instantiatePosition)
     {
         const float OffsetY = 0.05f;//重なりを防ぐため
-        if (DraggingUnitData == null) { return; }
+        if (draggingUnitData == null) { return; }
 
         //予算が足りなければ帰る
-        if (!costCounter.Pay(DraggingUnitData.InstantiateCost))
+        if (!costCounter.Pay(draggingUnitData.InstantiateCost))
         {
+            print("予算不足で召喚できませんでした");
             return;
         }
 
-        var instantiatedObject = Instantiate(DraggingUnitData.InstantiateUnit, MainSceneManager.Instance.ActorNode);
+        draggingUnit.transform.parent = MainSceneManager.Instance.ActorNode;
+        var instantiatedObject = draggingUnit;
         var pos = instantiatePosition;
         pos.y = OffsetY;
         instantiatedObject.transform.position = pos;
+        instantiatedObject.GetComponent<Unit>().Initialize(PlayerNumber);
+        draggingUnit = null;
+        draggingUnitData = null;
     }
 }

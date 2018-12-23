@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 using TMPro;
 
 /// <summary>
@@ -8,12 +9,47 @@ using TMPro;
 /// </summary>
 public abstract class Unit : HpActor {
 
-    [SerializeField]
     protected TextMeshPro debugText;
 
-    protected void UnitStart()
+    protected bool isActive;
+    protected Transform targetTower;
+    protected NavMeshAgent agent;
+    protected Animator animator;
+
+    /// <summary>
+    /// ドラッグ開始時に呼ばれる.
+    /// AiActorCOntrollerでStartが呼ばれる前に呼びたいので
+    /// 明示的呼び出しできるようにしている
+    /// </summary>
+    public void UnitStart()
     {
         debugText = GetComponentInChildren<TextMeshPro>();
+        agent = GetComponent<NavMeshAgent>();
+        animator = GetComponentInChildren<Animator>();
+        var colliders = GetComponentsInChildren<Collider>();//タッチのレイキャストに反応しないように
+        foreach(var col in colliders)
+        {
+            col.enabled = false;
+        }
+        agent.enabled = false;
+    }
+
+    /// <summary>
+    /// 召喚時に外部から呼び出される.独自に処理したければoverridce
+    /// </summary>
+    public override void Initialize(int playerNum)
+    {
+        base.Initialize(playerNum);
+        isActive = true;
+        var colliders = GetComponentsInChildren<Collider>();
+        foreach (var col in colliders)
+        {
+            col.enabled = true;
+        }
+        agent.enabled = true;
+        targetTower = MainSceneManager.Instance.GetNearestOtherPlayerTower(PlayerNumber, transform.position);
+        agent.SetDestination(targetTower.position);
+        animator.SetFloat("Velocity", agent.speed);
     }
 
     protected static float GetNearestUnit(Unit self,List<Unit> unitList,out Unit nearestUnit)

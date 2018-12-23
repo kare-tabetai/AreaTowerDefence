@@ -9,20 +9,18 @@ public class Walker : Unit, iTouchBegin {
     GameObject instantiatableAreaPrefab;
 
     GameObject instableArea;
-    Transform target;
-    NavMeshAgent agent;
-    Animator animator;
 	void Start () {
-        UnitStart();
-        agent = GetComponent<NavMeshAgent>();
-        animator = GetComponentInChildren<Animator>();
-        target = MainSceneManager.Instance.GetNearestOtherPlayerTower(PlayerNumber,transform.position);
-        agent.SetDestination(target.position);
-        animator.SetFloat("Velocity", agent.speed);
+    }
+
+    void Update()
+    {
+        if (!isActive) { return; }
     }
 
     public void TouchBegin(TouchInputManager.TouchInfo touchInfo)
     {
+        if (!isActive) { return; }
+
         if (touchInfo.PlayerNum != PlayerNumber)
         {
             print("自分が生成したオブジェクト以外がタッチされました");

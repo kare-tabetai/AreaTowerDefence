@@ -36,7 +36,9 @@ public class AiActorController : ActorController
                 var pos = OwnTower.position;
                 pos.y = OffsetY;
                 instantiatedObject.transform.position = pos;
-                instantiatedObject.GetComponent<Unit>().Initialize(PlayerNumber);
+                var unitComponent = instantiatedObject.GetComponent<Unit>();
+                unitComponent.UnitStart();
+                unitComponent.Initialize(PlayerNumber);
                 return;
             }
         }

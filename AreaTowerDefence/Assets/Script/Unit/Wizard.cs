@@ -17,20 +17,13 @@ public class Wizard : Unit
     List<Unit> unitInRange = new List<Unit>();
     [Disable, SerializeField]
     WizardState state;
-    Transform targetTower;
-    NavMeshAgent agent;
-    Animator animator;
     void Start () {
-        UnitStart();
-        agent = GetComponent<NavMeshAgent>();
-        animator = GetComponentInChildren<Animator>();
-        targetTower = MainSceneManager.Instance.GetNearestOtherPlayerTower(PlayerNumber, transform.position);
-        agent.SetDestination(targetTower.position);
-        animator.SetFloat("Velocity", agent.speed);
     }
 
     void Update()
     {
+        if (!isActive) { return; }
+
         StateCheck();
         debugText.text = state.ToString();
         switch (state)
@@ -93,6 +86,8 @@ public class Wizard : Unit
 
     private void OnTriggerEnter(Collider other)
     {
+        if (!isActive) { return; }
+
         if (other.tag == "Actor")
         {
             var unit = other.GetComponent<Unit>();
@@ -104,6 +99,8 @@ public class Wizard : Unit
 
     private void OnTriggerExit(Collider other)
     {
+        if (!isActive) { return; }
+
         if (other.tag == "Actor")
         {
             var unit = other.GetComponent<Unit>();

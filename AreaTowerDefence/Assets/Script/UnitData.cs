@@ -8,8 +8,6 @@ public class UnitData : ScriptableObject {
     public string UnitName;
     [SerializeField,Tooltip("実際に生成するオブジェクト")]
     public GameObject InstantiateUnit;
-    [SerializeField, Tooltip("ドラッグ中に表示するオブジェクト")]
-    public GameObject DraggingUnit;
     [SerializeField, Tooltip("召喚コスト")]
     public int InstantiateCost;
 }
