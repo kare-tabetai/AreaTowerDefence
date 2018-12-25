@@ -21,6 +21,7 @@ public class Wizard : Unit, iTouchEnd
     [Disable, SerializeField]
     WizardState state;
     void Start () {
+
     }
 
     void Update()

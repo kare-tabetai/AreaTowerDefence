@@ -50,4 +50,16 @@ public class MainSceneManager : MonoSingleton<MainSceneManager>
         Debug.Assert(nearestTower != null);
         return nearestTower;
     }
+
+    /// <summary>
+    /// 指定した番号がPlayerなことを表明
+    /// </summary>
+    public void AssertPlayerController(int playerNum)
+    {
+        Debug.Assert(
+            MainSceneManager.Instance
+            .Controllers[playerNum]
+            .GetComponent<PlayerActorController>() != null
+            );
+    }
 }

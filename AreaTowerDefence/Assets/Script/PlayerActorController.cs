@@ -4,10 +4,14 @@ using UnityEngine;
 
 public class PlayerActorController : ActorController {
 
-    [SerializeField,Disable]
-    UnitData draggingUnitData;//ドラッグして選択中のUnit
+    [SerializeField,Disable,Tooltip("ドラッグして選択中の召喚しようとしているUnit")]
+    UnitData draggingInstUnitData;
+    [Tooltip("ドラッグして選択中の召喚しようとしているUnitの実体")]
+    GameObject draggingInstUnit;
 
-    GameObject draggingUnit;
+    [Tooltip("ActorをDragしていればtrue")]
+    public bool isActorDragging;
+    public bool IsActorDragging { get { return isActorDragging; } }
 
     void Start () {
 		
@@ -15,12 +19,14 @@ public class PlayerActorController : ActorController {
 
     public void InstantiatableUnitButtonBeginDrag(UnitData instUnit)
     {
-        Debug.Assert(draggingUnitData == null);
-        Debug.Assert(draggingUnit == null);
+        Debug.Assert(draggingInstUnitData == null);
+        Debug.Assert(draggingInstUnit == null);
 
-        draggingUnitData = instUnit;
-        draggingUnit = Instantiate(instUnit.InstantiateUnit);
-        draggingUnit.GetComponent<Unit>().UnitStart();
+        draggingInstUnitData = instUnit;
+        draggingInstUnit = Instantiate(instUnit.InstantiateUnit);
+        var unit = draggingInstUnit.GetComponent<Unit>();
+        unit.UnitStart();
+        isActorDragging = true;
     }
 
     void Update () {
@@ -34,9 +40,10 @@ public class PlayerActorController : ActorController {
 
         if (!touchInfo.Touching)
         {
-            draggingUnitData = null;
-            Destroy(draggingUnit);
-            draggingUnit = null;
+            draggingInstUnitData = null;
+            Destroy(draggingInstUnit);
+            draggingInstUnit = null;
+            isActorDragging = false;
             return;
         }
         if (!touchInfo.ObjectHit)
@@ -44,9 +51,9 @@ public class PlayerActorController : ActorController {
             return;
         }
         //ここまで来ていれば接触点がある
-        if (draggingUnit != null)
+        if (draggingInstUnit != null)
         {
-           draggingUnit.transform.position = touchInfo.RayCastInfo.point;
+           draggingInstUnit.transform.position = touchInfo.RayCastInfo.point;
         }
 
         if (touchInfo.RayCastInfo.collider.tag == "Stage")
@@ -73,6 +80,15 @@ public class PlayerActorController : ActorController {
         {
             touchObject.TouchBegin(touchInfo);
         }
+        if (touchInfo.ObjectHit)
+        {
+            //毎フレームGetComponentしたくないのでちょっと階層が深くなってる
+            var actor = touchInfo.RayCastInfo.collider.GetComponent<Actor>();
+            if (actor != null)
+            {
+                isActorDragging = true;
+            }
+        }
     }
 
     void TouchEnded(TouchInputManager.TouchInfo touchInfo)
@@ -86,6 +102,7 @@ public class PlayerActorController : ActorController {
         {
             touchObject.TouchEnd(touchInfo);
         }
+        isActorDragging = false;
     }
 
     /// <summary>
@@ -95,22 +112,22 @@ public class PlayerActorController : ActorController {
     void InstantiateDraggedUnit(Vector3 instantiatePosition)
     {
         const float OffsetY = 0.05f;//重なりを防ぐため
-        if (draggingUnitData == null) { return; }
+        if (draggingInstUnitData == null) { return; }
 
         //予算が足りなければ帰る
-        if (!costCounter.Pay(draggingUnitData.InstantiateCost))
+        if (!costCounter.Pay(draggingInstUnitData.InstantiateCost))
         {
             print("予算不足で召喚できませんでした");
             return;
         }
 
-        draggingUnit.transform.parent = MainSceneManager.Instance.ActorNode;
-        var instantiatedObject = draggingUnit;
+        draggingInstUnit.transform.parent = MainSceneManager.Instance.ActorNode;
+        var instantiatedObject = draggingInstUnit;
         var pos = instantiatePosition;
         pos.y = OffsetY;
         instantiatedObject.transform.position = pos;
         instantiatedObject.GetComponent<Unit>().Initialize(PlayerNumber);
-        draggingUnit = null;
-        draggingUnitData = null;
+        draggingInstUnit = null;
+        draggingInstUnitData = null;
     }
 }
