@@ -36,36 +36,15 @@ public class PlayerActorController : ActorController {
     void TouchInput()
     {
         var touchInfo = TouchInputManager.Instance.CurrentTouchInfo;
-        
-
-        if (!touchInfo.Touching)
-        {
-            draggingInstUnitData = null;
-            Destroy(draggingInstUnit);
-            draggingInstUnit = null;
-            isActorDragging = false;
-            return;
-        }
-        if (!touchInfo.ObjectHit)
-        {
-            return;
-        }
-        //ここまで来ていれば接触点がある
-        if (draggingInstUnit != null)
-        {
-           draggingInstUnit.transform.position = touchInfo.RayCastInfo.point;
-        }
-
-        if (touchInfo.RayCastInfo.collider.tag == "Stage")
-        {
-
-        }
 
         if (touchInfo.Touch.phase == TouchPhase.Began)
         {
             TouchBegin(touchInfo);
         }
-
+        if (touchInfo.Touch.phase == TouchPhase.Moved)
+        {
+            TouchMoved(touchInfo);
+        }
         if (touchInfo.Touch.phase == TouchPhase.Ended)
         {
             TouchEnded(touchInfo);
@@ -75,33 +54,49 @@ public class PlayerActorController : ActorController {
 
     void TouchBegin(TouchInputManager.TouchInfo touchInfo)
     {
+        if (!touchInfo.ObjectHit) { return; }
         var touchObject = touchInfo.RayCastInfo.collider.GetComponent<iTouchBegin>();//&&でしてもいいが毎回GetCompするのを防ぐため
         if (touchObject != null)
         {
             touchObject.TouchBegin(touchInfo);
         }
-        if (touchInfo.ObjectHit)
+
+        //毎フレームGetComponentしたくないので
+        var actor = touchInfo.RayCastInfo.collider.GetComponent<Actor>();
+        if (actor != null)
         {
-            //毎フレームGetComponentしたくないのでちょっと階層が深くなってる
-            var actor = touchInfo.RayCastInfo.collider.GetComponent<Actor>();
-            if (actor != null)
-            {
-                isActorDragging = true;
-            }
+            isActorDragging = true;
+        }
+    }
+
+    void TouchMoved(TouchInputManager.TouchInfo touchInfo)
+    {
+        if (!touchInfo.ObjectHit) { return; }//この下はレイの接触点があった場合
+        if (draggingInstUnit != null)
+        {
+            draggingInstUnit.transform.position = touchInfo.RayCastInfo.point;
         }
     }
 
     void TouchEnded(TouchInputManager.TouchInfo touchInfo)
     {
-        if(touchInfo.RayCastInfo.collider.tag== "InstantiatableArea")
+        if (touchInfo.ObjectHit && touchInfo.RayCastInfo.collider.tag == "InstantiatableArea")
         {
             InstantiateDraggedUnit(touchInfo.RayCastInfo.point);
         }
-        var touchObject = touchInfo.RayCastInfo.collider.GetComponent<iTouchEnd>();
-        if (touchObject != null)
+
+        if (touchInfo.ObjectHit)
         {
-            touchObject.TouchEnd(touchInfo);
+            var touchObject = touchInfo.RayCastInfo.collider.GetComponent<iTouchEnd>();
+            if (touchObject != null)
+            {
+                touchObject.TouchEnd(touchInfo);
+            }
         }
+
+        draggingInstUnitData = null;
+        Destroy(draggingInstUnit);
+        draggingInstUnit = null;
         isActorDragging = false;
     }
 

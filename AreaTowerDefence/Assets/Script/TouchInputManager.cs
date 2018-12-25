@@ -39,7 +39,6 @@ public class TouchInputManager : MonoSingleton<TouchInputManager> {
 
 	void Start () {
         MainSceneManager.Instance.AssertPlayerController(playerNum);
-
 	}
 
     void Update()
@@ -87,7 +86,7 @@ public class TouchInputManager : MonoSingleton<TouchInputManager> {
         Vector2 touchPos = Input.mousePosition;
         RaycastHit hitInfo;
         var touchInfo = new TouchInfo();
-        touchInfo.ObjectHit = RayCast(touchPos, out hitInfo);
+        var objectHit = RayCast(touchPos, out hitInfo);
         touchInfo.RayCastInfo = hitInfo;
         if (Input.GetMouseButtonDown(0))
         {
@@ -97,7 +96,7 @@ public class TouchInputManager : MonoSingleton<TouchInputManager> {
             touchInfo.Touching = true;
             touchInfo.PlayerNum = playerNum;
             touchInfo.TouchWindowPos = touchPos;
-            
+            touchInfo.ObjectHit = objectHit;
             return touchInfo;
         }
         else if (Input.GetMouseButtonUp(0))
@@ -106,7 +105,7 @@ public class TouchInputManager : MonoSingleton<TouchInputManager> {
             touchInfo.Touch.phase = TouchPhase.Ended;
             touchInfo.Touching = true;
             touchInfo.PlayerNum = playerNum;
-            
+            touchInfo.ObjectHit = objectHit;
             return touchInfo;
         }
         else if (Input.GetMouseButton(0))
@@ -117,6 +116,7 @@ public class TouchInputManager : MonoSingleton<TouchInputManager> {
             touchInfo.PlayerNum = playerNum;
             touchInfo.Touch.deltaPosition = touchPos - currentTouchInfo.TouchWindowPos;
             touchInfo.TouchWindowPos = touchPos;
+            touchInfo.ObjectHit = objectHit;
             return touchInfo;
         }
         touchInfo.Touching = false;
