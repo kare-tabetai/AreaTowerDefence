@@ -9,10 +9,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 26d282b2333554a4d8953402a1bfa650, type: 3}
-  m_Name: Walker_Enemy
+  m_Name: Archer_Player
   m_EditorClassIdentifier: 
-  UnitName: "\u30A6\u30A9\u30FC\u30AB\u30FC"
-  InstantiateUnit: {fileID: 1570103729886868, guid: a01195914a5db064fbb674bfefd4495b,
+  UnitName: "\u30A2\u30FC\u30C1\u30E3\u30FC"
+  InstantiateUnit: {fileID: 1173426926501778, guid: 38f1232d6cb63dd45876c969240094cf,
     type: 2}
-  DraggingUnit: {fileID: 0}
-  InstantiateCost: 50
+  InstantiateCost: 20

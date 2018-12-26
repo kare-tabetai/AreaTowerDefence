@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class Walker : Unit, iTouchBegin {
+public class Walker : Unit, iTouchEnd
+{
 
     [SerializeField]
     GameObject instantiatableAreaPrefab;
@@ -17,7 +18,7 @@ public class Walker : Unit, iTouchBegin {
         if (!isActive) { return; }
     }
 
-    public void TouchBegin(TouchInputManager.TouchInfo touchInfo)
+    public void TouchEnd(TouchInputManager.TouchInfo touchInfo)
     {
         if (!isActive) { return; }
 
