@@ -44,6 +44,23 @@ public static class EditorExtension
         }
     #endregion
 
+    public static Vector3 XYtoXZ(this Vector3 vector)
+    {
+        vector3.Set(vector.x, 0, vector.y);
+        return vector3;
+    }
+    public static Vector3 XYtoXZ(this Vector2 vector)
+    {
+        vector3.Set(vector.x, 0, vector.y);
+        return vector3;
+    }
+
+    public static Vector3 XZtoXY(this Vector3 vector)
+    {
+        vector3.Set(vector.x, vector.z,0);
+        return vector3;
+    }
+
     public static void SetWidth(this SpriteRenderer spriteRenderer,float width)
     {
         vector3.Set(width,spriteRenderer.size.y,0);

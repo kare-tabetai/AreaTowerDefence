@@ -6,6 +6,18 @@ public class CameraController : Actor
 {
     [SerializeField]
     float cameraVelocity=1;
+    [SerializeField]
+    bool xAxisLock;
+    [SerializeField]
+    bool zAxisLock;
+    [SerializeField]
+    public bool isStopped;
+    [SerializeField]
+    Vector2 areaCenter;
+    [SerializeField]
+    Vector2 areaSize;
+    [SerializeField,Tooltip("移動制限のギズモのY")]
+    float areaViewCenter;
 
     TouchInputManager touchInputManager;
     PlayerActorController playerActorController;
@@ -16,17 +28,42 @@ public class CameraController : Actor
         playerActorController = (PlayerActorController)MainSceneManager.Instance.Controllers[PlayerNumber];
     }
 
+    void OnDrawGizmos()
+    {
+        var center = areaCenter.XYtoXZ();
+        center.y = areaViewCenter;
+        Gizmos.DrawWireCube(center, areaSize.XYtoXZ());
+    }
+
     //カメラ系はいろいろ処理してからのほうがいいのでLateUpdateにしている
-	void LateUpdate ()
+    void LateUpdate ()
 	{
         CameraMove();
     }
 
     void CameraMove()
     {
+        if (isStopped) { return; }
         if (playerActorController.IsActorDragging) { return; }//Actorをドラックしていたら動かさない
         var deltaPos = touchInputManager.CurrentTouchInfo.Touch.deltaPosition;
-        Vector2 vec = deltaPos * cameraVelocity * Time.deltaTime;
-        transform.Translate(-vec.x, 0, -vec.y, Space.World);//x,y平面をx,z平面に変換
+        if (xAxisLock) { deltaPos.x = 0; }
+        if (zAxisLock) { deltaPos.y = 0; }
+        Vector2 deltaVec = deltaPos * cameraVelocity * Time.deltaTime;
+        transform.Translate(-deltaVec.XYtoXZ(), Space.World);//x,y平面をx,z平面に変換
+        var clampVec = transform.position;
+        if (!xAxisLock)
+        {
+            clampVec.x =
+            Mathf.Clamp(clampVec.x,
+            areaCenter.x - areaSize.x / 2,
+            areaCenter.x + areaSize.x / 2);
+        }
+        if (!zAxisLock)
+        {
+            clampVec.z = Mathf.Clamp(clampVec.z,
+            areaCenter.y - areaSize.y / 2,
+            areaCenter.y + areaSize.y / 2);
+        }
+        transform.position = clampVec;
     }
 }
