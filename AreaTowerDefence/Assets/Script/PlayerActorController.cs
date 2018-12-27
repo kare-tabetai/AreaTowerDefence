@@ -4,21 +4,22 @@ using UnityEngine;
 
 public class PlayerActorController : ActorController {
 
+    [SerializeField, Disable,Tooltip("召喚されたunitの数")]
+    int unitNum = 0;
     [SerializeField,Disable,Tooltip("ドラッグして選択中の召喚しようとしているUnit")]
     UnitData draggingInstUnitData;
     [Tooltip("ドラッグして選択中の召喚しようとしているUnitの実体")]
     GameObject draggingInstUnit;
-    [SerializeField, Disable]
-    int unitNum = 0;
-    [Tooltip("ActorをDragしていればtrue")]
-    public bool isActorDragging;
+
+    [Tooltip("ActorをDragしていればtrue,カメラ移動でなんかつかんでいるかを見る用")]
+    bool isActorDragging;
     public bool IsActorDragging { get { return isActorDragging; } }
 
     void Start () {
 		
 	}
 
-    public void InstantiatableUnitButtonBeginDrag(UnitData instUnit)
+    public void InstanteUnitButtonBeginDrag(UnitData instUnit)
     {
         Debug.Assert(draggingInstUnitData == null);
         Debug.Assert(draggingInstUnit == null);
@@ -60,13 +61,6 @@ public class PlayerActorController : ActorController {
         if (touchObject != null)
         {
             touchObject.TouchBegin(touchInfo);
-        }
-
-        //毎フレームGetComponentしたくないので
-        var actor = touchInfo.RayCastInfo.collider.GetComponent<Actor>();
-        if (actor != null)
-        {
-            isActorDragging = true;
         }
     }
 

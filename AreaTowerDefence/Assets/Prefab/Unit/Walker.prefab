@@ -1617,7 +1617,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playerNumber: 0
   hp: 100
-  instantiatableAreaPrefab: {fileID: 1496121370521220, guid: 998691390c8849d47a5f3cb5fa4aeca5,
+  instantiatePrefab: {fileID: 1496121370521220, guid: 998691390c8849d47a5f3cb5fa4aeca5,
     type: 2}
 --- !u!114 &114982577669632020
 MonoBehaviour:

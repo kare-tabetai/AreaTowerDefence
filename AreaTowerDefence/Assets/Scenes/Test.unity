@@ -978,7 +978,7 @@ Prefab:
     - target: {fileID: 114779036727163112, guid: 06cad9cf7b83d304692d802a65558af1,
         type: 2}
       propertyPath: m_Delegates.Array.data[0].callback.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: InstantiatableUnitButtonBeginDrag
+      value: InstanteUnitButtonBeginDrag
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 06cad9cf7b83d304692d802a65558af1, type: 2}
@@ -5461,7 +5461,7 @@ Prefab:
     - target: {fileID: 114504821831148538, guid: 4c2e58fdc370306479f422796c5f4535,
         type: 2}
       propertyPath: m_Delegates.Array.data[0].callback.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: InstantiatableUnitButtonBeginDrag
+      value: InstanteUnitButtonBeginDrag
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 4c2e58fdc370306479f422796c5f4535, type: 2}
@@ -6081,7 +6081,7 @@ Prefab:
     - target: {fileID: 114819126201356184, guid: 6ab7af2a4ce6d5c4a93e847f1bc33dcc,
         type: 2}
       propertyPath: m_Delegates.Array.data[0].callback.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: InstantiatableUnitButtonBeginDrag
+      value: InstanteUnitButtonBeginDrag
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 6ab7af2a4ce6d5c4a93e847f1bc33dcc, type: 2}
@@ -6576,7 +6576,7 @@ Prefab:
     - target: {fileID: 114979376342131508, guid: 97e31b68dd22ddc4bb4684bdabca1c8b,
         type: 2}
       propertyPath: m_Delegates.Array.data[0].callback.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: InstantiatableUnitButtonBeginDrag
+      value: InstanteUnitButtonBeginDrag
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 97e31b68dd22ddc4bb4684bdabca1c8b, type: 2}

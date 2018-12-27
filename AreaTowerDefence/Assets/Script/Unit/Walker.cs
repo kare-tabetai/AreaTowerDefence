@@ -7,9 +7,9 @@ public class Walker : Unit, iTouchEnd
 {
 
     [SerializeField]
-    GameObject instantiatableAreaPrefab;
+    GameObject instantiatePrefab;
 
-    GameObject instableArea;
+    GameObject instantiateArea;
 	void Start () {
     }
 
@@ -27,22 +27,23 @@ public class Walker : Unit, iTouchEnd
             print("自分が生成したオブジェクト以外がタッチされました");
             return;
         }
-        if (instableArea != null)
+        if (instantiateArea != null)
         {
-            print("instavleAreaが生成されています");
+            print("instaatiateAreaが生成されています");
+            return;
         }
         agent.isStopped = true;
         animator.SetFloat("Velocity", 0);
-        InstantiateInstantiatableArea();
+        InstantiateArea();
     }
 
     //AIからTouchBeginを介さずにアクセスさせるためpublic
-    public void InstantiateInstantiatableArea()
+    public void InstantiateArea()
     {
         const float OffsetY = 0.05f;//重なってちらつくのを防ぐため
         var pos = transform.position;
-        pos.y = OffsetY;
-        instableArea = Instantiate(instantiatableAreaPrefab, pos, instantiatableAreaPrefab.transform.rotation);
-        instableArea.GetComponent<Actor>().Initialize(PlayerNumber);
+        pos.y += OffsetY;
+        instantiateArea = Instantiate(instantiatePrefab, pos, instantiatePrefab.transform.rotation);
+        instantiateArea.GetComponent<Actor>().Initialize(PlayerNumber);
     }
 }

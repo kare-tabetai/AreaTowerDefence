@@ -24,7 +24,7 @@ GameObject:
   - component: {fileID: 64942370396228326}
   - component: {fileID: 114093741915467890}
   m_Layer: 10
-  m_Name: instantiatableArea
+  m_Name: InstantiateArea
   m_TagString: InstantiatableArea
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
