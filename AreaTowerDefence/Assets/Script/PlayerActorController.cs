@@ -8,7 +8,8 @@ public class PlayerActorController : ActorController {
     UnitData draggingInstUnitData;
     [Tooltip("ドラッグして選択中の召喚しようとしているUnitの実体")]
     GameObject draggingInstUnit;
-
+    [SerializeField, Disable]
+    int unitNum = 0;
     [Tooltip("ActorをDragしていればtrue")]
     public bool isActorDragging;
     public bool IsActorDragging { get { return isActorDragging; } }
@@ -107,7 +108,10 @@ public class PlayerActorController : ActorController {
     void InstantiateDraggedUnit(Vector3 instantiatePosition)
     {
         const float OffsetY = 0.05f;//重なりを防ぐため
+        const int MaxUnitNum = 50;//unit数制限
+
         if (draggingInstUnitData == null) { return; }
+        if (MaxUnitNum <= unitNum) { return; }
 
         //予算が足りなければ帰る
         if (!costCounter.Pay(draggingInstUnitData.InstantiateCost))
@@ -116,6 +120,7 @@ public class PlayerActorController : ActorController {
             return;
         }
 
+        unitNum++;
         draggingInstUnit.transform.parent = MainSceneManager.Instance.ActorNode;
         var instantiatedObject = draggingInstUnit;
         var pos = instantiatePosition;

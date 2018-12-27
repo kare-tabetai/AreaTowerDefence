@@ -32,7 +32,12 @@ public class CameraController : Actor
     {
         var center = areaCenter.XYtoXZ();
         center.y = areaViewCenter;
+        Gizmos.color = Color.white;
         Gizmos.DrawWireCube(center, areaSize.XYtoXZ());
+        Gizmos.color = Color.red;
+        var endLine = transform.position;
+        endLine.y = areaViewCenter;
+        Gizmos.DrawLine(transform.position,endLine);
     }
 
     //カメラ系はいろいろ処理してからのほうがいいのでLateUpdateにしている
