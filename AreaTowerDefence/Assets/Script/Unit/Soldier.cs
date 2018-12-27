@@ -22,7 +22,7 @@ public class Soldier : Unit {
 
     void Update()
     {
-        if (!isActive) { return; }
+        if (!isInitialized) { return; }
 
         StateCheck();
         debugText.text = state.ToString();
@@ -83,7 +83,7 @@ public class Soldier : Unit {
 
     private void OnTriggerEnter(Collider other)
     {
-        if (!isActive) { return; }
+        if (!isInitialized) { return; }
 
         print("hit");
         if (other.tag == "Actor")
@@ -98,7 +98,7 @@ public class Soldier : Unit {
 
     private void OnTriggerExit(Collider other)
     {
-        if (!isActive) { return; }
+        if (!isInitialized) { return; }
 
         if (other.tag == "Actor")
         {

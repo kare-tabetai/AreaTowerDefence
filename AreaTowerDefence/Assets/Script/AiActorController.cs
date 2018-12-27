@@ -28,7 +28,7 @@ public class AiActorController : ActorController
     void InstantiateUnit()
     {
         const float OffsetY = 0.05f;//重なりを防ぐため
-        const int MaxUnitNum = 50;//unit数制限
+        const int MaxUnitNum = 50;  //unit数制限
 
         if (MaxUnitNum <= unitNum) { return; }
 

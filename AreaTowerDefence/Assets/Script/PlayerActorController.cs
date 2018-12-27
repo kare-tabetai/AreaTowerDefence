@@ -31,6 +31,11 @@ public class PlayerActorController : ActorController {
         isActorDragging = true;
     }
 
+    public void InstantiatedUnitBeginDrag(Unit unit)
+    {
+        isActorDragging = true;
+    }
+
     void Update () {
         TouchInput();
     }
@@ -57,7 +62,7 @@ public class PlayerActorController : ActorController {
     void TouchBegin(TouchInputManager.TouchInfo touchInfo)
     {
         if (!touchInfo.ObjectHit) { return; }
-        var touchObject = touchInfo.RayCastInfo.collider.GetComponent<iTouchBegin>();//&&でしてもいいが毎回GetCompするのを防ぐため
+        var touchObject = touchInfo.RayCastInfo.collider.GetComponent<iTouchBegin>();
         if (touchObject != null)
         {
             touchObject.TouchBegin(touchInfo);
@@ -66,7 +71,13 @@ public class PlayerActorController : ActorController {
 
     void TouchMoved(TouchInputManager.TouchInfo touchInfo)
     {
-        if (!touchInfo.ObjectHit) { return; }//この下はレイの接触点があった場合
+        if (!touchInfo.ObjectHit) { return; }
+        var touchObject = touchInfo.RayCastInfo.collider.GetComponent<iTouchMoved>();
+        if (touchObject != null)
+        {
+            touchObject.TouchMoved(touchInfo);
+        }
+
         if (draggingInstUnit != null)
         {
             draggingInstUnit.transform.position = touchInfo.RayCastInfo.point;

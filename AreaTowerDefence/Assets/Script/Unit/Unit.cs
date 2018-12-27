@@ -3,18 +3,20 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 using TMPro;
+using System;
 
 /// <summary>
 /// 動く駒を作るときはこれを継承
 /// </summary>
-public abstract class Unit : HpActor {
+public abstract class Unit : HpActor,iTouchBegin,iTouchMoved {
 
     protected TextMeshPro debugText;
 
-    protected bool isActive;
+    protected bool isInitialized;//unitが召喚エリアに置かれたらtrueに
     protected Transform targetTower;
     protected NavMeshAgent agent;
     protected Animator animator;
+    protected Queue<iUnitInstruction> instrucitonQueue;
 
     /// <summary>
     /// ドラッグ開始時に呼ばれる.
@@ -40,7 +42,7 @@ public abstract class Unit : HpActor {
     public override void Initialize(int playerNum)
     {
         base.Initialize(playerNum);
-        isActive = true;
+        isInitialized = true;
         var colliders = GetComponentsInChildren<Collider>();
         foreach (var col in colliders)
         {
@@ -52,6 +54,28 @@ public abstract class Unit : HpActor {
         animator.SetFloat("Velocity", agent.speed);
     }
 
+    public void TouchBegin(TouchInputManager.TouchInfo touchInfo)
+    {
+        if (!isInitialized) { return; }
+        PlayerActorController playerActorController 
+            = (PlayerActorController)MainSceneManager.Instance
+            .Controllers[touchInfo.PlayerNum];
+        playerActorController.InstantiatedUnitBeginDrag(this);
+    }
+
+    public void TouchMoved(TouchInputManager.TouchInfo touchInfo)
+    {
+        if (!isInitialized) { return; }
+
+    }
+
+    /// <summary>
+    /// リストからselfに一番近いunitを取り出す
+    /// </summary>
+    /// <param name="self">自分</param>
+    /// <param name="unitList">探すunitのリスト</param>
+    /// <param name="nearestUnit">一番近かったunit</param>
+    /// <returns>一番近いunitの距離の2乗</returns>
     protected static float GetNearestUnit(Unit self,List<Unit> unitList,out Unit nearestUnit)
     {
         Debug.Assert(unitList.Count != 0);

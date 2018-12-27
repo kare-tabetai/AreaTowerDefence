@@ -15,12 +15,12 @@ public class Walker : Unit, iTouchEnd
 
     void Update()
     {
-        if (!isActive) { return; }
+        if (!isInitialized) { return; }
     }
 
     public void TouchEnd(TouchInputManager.TouchInfo touchInfo)
     {
-        if (!isActive) { return; }
+        if (!isInitialized) { return; }
 
         if (touchInfo.PlayerNum != PlayerNumber)
         {
@@ -38,7 +38,7 @@ public class Walker : Unit, iTouchEnd
     }
 
     //AIからTouchBeginを介さずにアクセスさせるためpublic
-    public void InstantiateArea()
+    void InstantiateArea()
     {
         const float OffsetY = 0.05f;//重なってちらつくのを防ぐため
         var pos = transform.position;

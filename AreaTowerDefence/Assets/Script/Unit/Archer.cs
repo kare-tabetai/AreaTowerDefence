@@ -27,7 +27,7 @@ public class Archer : Unit, iTouchEnd
 
     void Update()
     {
-        if (!isActive) { return; }
+        if (!isInitialized) { return; }
 
         StateCheck();
         debugText.text = state.ToString();
@@ -95,7 +95,7 @@ public class Archer : Unit, iTouchEnd
 
     private void OnTriggerEnter(Collider other)
     {
-        if (!isActive) { return; }
+        if (!isInitialized) { return; }
 
         if (other.tag == "Actor")
         {
@@ -108,7 +108,7 @@ public class Archer : Unit, iTouchEnd
 
     private void OnTriggerExit(Collider other)
     {
-        if (!isActive) { return; }
+        if (!isInitialized) { return; }
 
         if (other.tag == "Actor")
         {
