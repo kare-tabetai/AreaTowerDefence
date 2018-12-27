@@ -3,16 +3,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Archer : Unit, iTouchEnd
+public class Archer : Unit
 {
-
     [SerializeField]
     GameObject allow;
     [SerializeField]
-    float speed = 5;
+    float attackRag = 1;
 
     List<Unit> unitInRange = new List<Unit>();
-    [Disable, SerializeField]
 
     public override void Initialize(int playerNum)
     {
@@ -25,80 +23,35 @@ public class Archer : Unit, iTouchEnd
         }
         agent.enabled = true;
         targetTower = MainSceneManager.Instance.GetNearestOtherPlayerTower(PlayerNumber, transform.position);
-        agent.SetDestination(targetTower.position);
-        animator.SetFloat("Velocity", agent.speed);
+        var unitMoveInstruction = new UnitMoveInstruction();
+        unitMoveInstruction.Initialize(PackUnitInformation(),targetTower.transform.position);
+        instrucitonQueue.Enqueue(unitMoveInstruction);
     }
 
     void Start ()
 	{
-		
-	}
+    }
 
     void Update()
     {
         if (!isInitialized) { return; }
+        if (instrucitonQueue.Count==0) { return; }
+        var currentInstruction = instrucitonQueue.Peek();
+        debugText.text = currentInstruction.ToString();
 
-        StateCheck();
-        debugText.text = state.ToString();
-        switch (state)
+        if (unitInRange.Count != 0)
         {
-            case ArcherState.Progress:
-                break;
-
-            case ArcherState.Fight:
-                Fight();
-                break;
-        }
-    }
-
-    void StateCheck()
-    {
-        unitInRange.RemoveAll(item => item == null);//nullを削除
-        if (unitInRange.Count == 0)
+            if (currentInstruction.GetType()==typeof(UnitFightInstruction))
+            { return; }
+            HasRangeUnitInformation unitInfo = PackHasRangeUnitInformation(unitInRange);
+            unitInfo.UnitInRange = unitInRange;
+            unitInfo.ReleaseQueue();
+            var newInstruction = new UnitFightInstruction();
+            newInstruction.Initialize(unitInfo, attackRag, allow);
+            instrucitonQueue.Enqueue(newInstruction);
+        }else
         {
-            if (state == ArcherState.Progress) { return; }
-            state = ArcherState.Progress;
-            agent.isStopped = false;
-            agent.SetDestination(targetTower.position);
-            animator.SetBool("Attack", false);
-            animator.SetFloat("Velocity", agent.speed);
-            return;
-        }
-        else
-        {
-            if (state == ArcherState.Fight) { return; }
-            state = ArcherState.Fight;
-            agent.isStopped = true;
-            animator.SetBool("Attack", true);
-        }
-    }
-
-    void Fight()
-    {
-        Unit nearestUnit;
-        var sqrDist = GetNearestUnit(this, unitInRange, out nearestUnit);
-        Attack(nearestUnit);
-    }
-
-    float attackTimer = 0;
-    void Attack(Unit attackTarget)
-    {
-        const float AttackRag = 1.0f;
-        const float AllowOffsetY = 1f;
-        print("attack");
-
-        attackTimer += Time.deltaTime;
-        if (AttackRag <= attackTimer)
-        {
-            attackTimer = 0f;
-            var allow = Instantiate(this.allow, MainSceneManager.Instance.ActorNode).GetComponent<Allow>();
-            var instPos = transform.position;
-            instPos.y += AllowOffsetY;
-            allow.transform.position = instPos;
-            var targetPos = attackTarget.transform.position;
-            targetPos.y += AllowOffsetY;
-            allow.transform.forward = targetPos - instPos;
-            allow.Initialize(PlayerNumber);
+            currentInstruction.UpdateUnitInstruction(PackUnitInformation());
         }
     }
 
@@ -125,20 +78,6 @@ public class Archer : Unit, iTouchEnd
             if (unit == null) { return; }
             if (unit.PlayerNumber == PlayerNumber) { return; }
             unitInRange.Remove(unit);
-        }
-    }
-
-    public void TouchEnd(TouchInputManager.TouchInfo touchInfo)
-    {
-        if (agent.speed == 0)
-        {
-            agent.speed = speed;
-            animator.SetFloat("Velocity", agent.speed);
-        }
-        else
-        {
-            agent.speed = 0;
-            animator.SetFloat("Velocity", agent.speed);
         }
     }
 }

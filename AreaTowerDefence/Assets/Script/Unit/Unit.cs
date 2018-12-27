@@ -19,7 +19,7 @@ public abstract class Unit : HpActor,iTouchBegin,iTouchMoved {
     /// Unitを継承した先で新たに必要なものができればこれを継承したものを送る
     /// 入力をUnit  処理,出力をUnitInstructionでさせる
     /// </summary>
-    protected class Unitinformation
+    protected class UnitInformation
     {
         public int PlayerNum;
         public int Hp;
@@ -38,17 +38,22 @@ public abstract class Unit : HpActor,iTouchBegin,iTouchMoved {
             this.InstrucitonQueue.Clear();
         }
     }
+    protected class HasRangeUnitInformation:UnitInformation
+    {
+        public List<Unit> UnitInRange = new List<Unit>();
+    }
+
     protected interface iUnitInstruction
     {
         /// <summary>
         /// 毎フレームのアップデート
         /// </summary>
         /// <param name="unitInfo"></param>
-        void UpdateUnitInstruction(Unitinformation unitInfo);
+        void UpdateUnitInstruction(UnitInformation unitInfo);
         /// <summary>
         /// Queueに追加されてから中止したい場合これを呼び出してからDeQueue
         /// </summary>
-        void Finalize(Unitinformation unitInfo);
+        void Finalize(UnitInformation unitInfo);
     }
     protected class UnitMoveInstruction : iUnitInstruction
     {
@@ -57,37 +62,48 @@ public abstract class Unit : HpActor,iTouchBegin,iTouchMoved {
         /// </summary>
         SpriteRenderer allowSprite;
 
-        public void Initialize(Unitinformation unitInfo, Vector3 movePosition, SpriteRenderer allowSprite = null)
+        public void Initialize(UnitInformation unitInfo, Vector3 movePosition, SpriteRenderer allowSprite = null)
         {
-            unitInfo.Animator.SetFloat("Speed", unitInfo.Agent.speed);
+            unitInfo.Animator.SetFloat("Velocity", unitInfo.Agent.speed);
             unitInfo.Agent.isStopped = false;
             unitInfo.Agent.SetDestination(movePosition);
             this.allowSprite = allowSprite;
         }
-        public void UpdateUnitInstruction(Unitinformation unitInfo)
+        public void UpdateUnitInstruction(UnitInformation unitInfo)
         {
             const float GoalDistance = 0.7f;
 
-            if (unitInfo.Agent.remainingDistance < GoalDistance)
+            var distance= unitInfo.Agent.destination - unitInfo.Unit.transform.position;
+            var sqeDist = distance.sqrMagnitude;
+            if (sqeDist < GoalDistance*GoalDistance)
             {
                 Finalize(unitInfo);
                 unitInfo.InstrucitonQueue.Dequeue();
+                return;
+            }
+            bool b = TouchInputManager.Instance
+                .CompareToSelfTouchPhase(unitInfo.Unit.gameObject, TouchPhase.Ended);
+            if (b)
+            {
+                unitInfo.ReleaseQueue();
+                var newInstruction = new UnitStopInstruction();
+                newInstruction.Initialize(unitInfo);
+                unitInfo.InstrucitonQueue.Enqueue(newInstruction);
             }
         }
-
-        public void Finalize(Unitinformation unitInfo)
+        public void Finalize(UnitInformation unitInfo)
         {
             if (allowSprite != null) { Destroy(allowSprite.gameObject); }
         }
     }
     protected class UnitStopInstruction : iUnitInstruction
     {
-        public void Initialize(Unitinformation unitInfo, Vector3 movePosition, SpriteRenderer allowSprite = null)
+        public void Initialize(UnitInformation unitInfo)
         {
-            unitInfo.Animator.SetFloat("Speed", 0);
+            unitInfo.Animator.SetFloat("Velocity", 0);
             unitInfo.Agent.isStopped = true;
         }
-        public void UpdateUnitInstruction(Unitinformation unitInfo)
+        public void UpdateUnitInstruction(UnitInformation unitInfo)
         {
             bool b = TouchInputManager.Instance
                 .CompareToSelfTouchPhase(unitInfo.Unit.gameObject, TouchPhase.Ended);
@@ -99,8 +115,83 @@ public abstract class Unit : HpActor,iTouchBegin,iTouchMoved {
                 unitInfo.InstrucitonQueue.Enqueue(newInstruction);
             }
         }
+        public void Finalize(UnitInformation unitInfo)
+        {
 
-        public void Finalize(Unitinformation unitInfo)
+        }
+    }
+    protected class UnitFightInstruction : iUnitInstruction
+    {
+        float attackTimer = 0;
+        float attackRag = 0;
+        int attackPower = -999;
+        /// <summary>
+        /// nullなら通常攻撃をする
+        /// </summary>
+        GameObject bulletPrefab;
+
+        public void Initialize(UnitInformation unitInfo, float attackRag, int attackPower)
+        {
+            unitInfo.Animator.SetBool("Attack", true);
+            unitInfo.Agent.isStopped = true;
+            this.attackRag = attackRag;
+            this.attackPower = attackPower;
+        }
+        public void Initialize(UnitInformation unitInfo,float attackRag,GameObject bulletPrefab)
+        {
+            unitInfo.Animator.SetBool("Attack",true);
+            unitInfo.Agent.isStopped = true;
+            this.attackRag = attackRag;
+            this.bulletPrefab = bulletPrefab;
+        }
+        public void UpdateUnitInstruction(UnitInformation unitInfo)
+        {
+            //キャスト可能なはず
+            var rangehasUnitInfo = (HasRangeUnitInformation)unitInfo;
+
+            if (rangehasUnitInfo.UnitInRange.Count == 0)
+            {
+                Finalize(unitInfo);
+                unitInfo.InstrucitonQueue.Dequeue();
+                rangehasUnitInfo.Agent.isStopped = false;
+                rangehasUnitInfo.Animator.SetBool("Attack",false);
+                return;
+            }
+            Unit nearestUnit;
+            var sqrDist = GetNearestUnit(rangehasUnitInfo.Unit, rangehasUnitInfo.UnitInRange, out nearestUnit);
+            Attack(rangehasUnitInfo, nearestUnit);
+        }
+        void Attack(HasRangeUnitInformation unitInfo,Unit attackTarget)
+        {
+            const float BulletOffsetY = 1f;
+
+            print("attack");
+
+            attackTimer += Time.deltaTime;
+            if (attackRag <= attackTimer)
+            {
+                attackTimer = 0f;
+                if (bulletPrefab != null)
+                {
+                    var bullet =
+                    Instantiate(bulletPrefab, MainSceneManager.Instance.ActorNode)
+                    .GetComponent<Actor>();
+                    var instPos = unitInfo.Unit.transform.position;
+                    instPos.y += BulletOffsetY;
+                    bullet.transform.position = instPos;
+                    var targetPos = attackTarget.transform.position;
+                    targetPos.y += BulletOffsetY;
+                    bullet.transform.forward = targetPos - instPos;
+                    bullet.Initialize(unitInfo.PlayerNum);
+                }else
+                {
+                    Debug.Assert(0 < attackPower);
+                    attackTarget.Damage(attackPower, unitInfo.Unit);
+                }
+
+            }
+        }
+        public void Finalize(UnitInformation unitInfo)
         {
 
         }
@@ -113,7 +204,11 @@ public abstract class Unit : HpActor,iTouchBegin,iTouchMoved {
     protected Transform targetTower;
     protected NavMeshAgent agent;
     protected Animator animator;
-    Queue<iUnitInstruction> instrucitonQueue;
+    /// <summary>
+    /// これがステートのQueue,
+    /// Unitの子やiUnitInstructionの子でDequeue,Enqueue,Clearして管理する
+    /// </summary>
+    protected Queue<iUnitInstruction> instrucitonQueue=new Queue<iUnitInstruction>();
 
     /// <summary>
     /// ドラッグ開始時に呼ばれる.
@@ -163,7 +258,30 @@ public abstract class Unit : HpActor,iTouchBegin,iTouchMoved {
     public void TouchMoved(TouchInputManager.TouchInfo touchInfo)
     {
         if (!isInitialized) { return; }
+    }
 
+    protected virtual UnitInformation PackUnitInformation()
+    {
+        var unitInformation = new UnitInformation();
+        unitInformation.PlayerNum = PlayerNumber;
+        unitInformation.Unit = this;
+        unitInformation.InstrucitonQueue = instrucitonQueue;
+        unitInformation.TargetTower = targetTower;
+        unitInformation.Agent = agent;
+        unitInformation.Animator = animator;
+        return unitInformation;
+    }
+    protected virtual HasRangeUnitInformation PackHasRangeUnitInformation(List<Unit> unitInRange)
+    {
+        var unitInformation = new HasRangeUnitInformation();
+        unitInformation.PlayerNum = PlayerNumber;
+        unitInformation.Unit = this;
+        unitInformation.InstrucitonQueue = instrucitonQueue;
+        unitInformation.TargetTower = targetTower;
+        unitInformation.Agent = agent;
+        unitInformation.Animator = animator;
+        unitInformation.UnitInRange = unitInRange;
+        return unitInformation;
     }
 
     /// <summary>
