@@ -41,6 +41,25 @@ public class TouchInputManager : MonoSingleton<TouchInputManager> {
         MainSceneManager.Instance.AssertPlayerController(playerNum);
 	}
 
+    /// <summary>
+    /// 現在のフレームで自分が指定のフェーズでタッチされているか
+    /// </summary>
+    /// <param name="self">このオブジェクトがタッチされていて</param>
+    /// <param name="phase">このフェーズだったらtrue</param>
+    public bool CompareToSelfTouchPhase(GameObject self,TouchPhase phase)
+    {
+        if (!currentTouchInfo.ObjectHit)
+        {
+            return false;
+        }
+        if (currentTouchInfo.RayCastInfo.collider.gameObject == self
+            && currentTouchInfo.Touch.phase==phase)
+        {
+            return true;
+        }
+        return false;
+    }
+
     void Update()
     {
         currentTouchInfo = TouchInfoUpdate();

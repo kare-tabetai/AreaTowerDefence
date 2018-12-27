@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.AI;
 using TMPro;
@@ -10,13 +11,109 @@ using System;
 /// </summary>
 public abstract class Unit : HpActor,iTouchBegin,iTouchMoved {
 
+    #region AI部分
+    /// <summary>
+    /// UnitInstructionに送る情報
+    /// Unitが持っているデータで
+    /// UnitInstructionが必要なものを全部送る
+    /// Unitを継承した先で新たに必要なものができればこれを継承したものを送る
+    /// 入力をUnit  処理,出力をUnitInstructionでさせる
+    /// </summary>
+    protected class Unitinformation
+    {
+        public int PlayerNum;
+        public int Hp;
+        public Unit Unit;
+        public Queue<iUnitInstruction> InstrucitonQueue;
+        public Transform TargetTower;
+        public NavMeshAgent Agent;
+        public Animator Animator;
+
+        public void ReleaseQueue()
+        {
+            foreach (var item in this.InstrucitonQueue)
+            {
+                item.Finalize(this);
+            }
+            this.InstrucitonQueue.Clear();
+        }
+    }
+    protected interface iUnitInstruction
+    {
+        /// <summary>
+        /// 毎フレームのアップデート
+        /// </summary>
+        /// <param name="unitInfo"></param>
+        void UpdateUnitInstruction(Unitinformation unitInfo);
+        /// <summary>
+        /// Queueに追加されてから中止したい場合これを呼び出してからDeQueue
+        /// </summary>
+        void Finalize(Unitinformation unitInfo);
+    }
+    protected class UnitMoveInstruction : iUnitInstruction
+    {
+        /// <summary>
+        /// この移動を示す矢印スプライトあれば終了時破棄する
+        /// </summary>
+        SpriteRenderer allowSprite;
+
+        public void Initialize(Unitinformation unitInfo, Vector3 movePosition, SpriteRenderer allowSprite = null)
+        {
+            unitInfo.Animator.SetFloat("Speed", unitInfo.Agent.speed);
+            unitInfo.Agent.isStopped = false;
+            unitInfo.Agent.SetDestination(movePosition);
+            this.allowSprite = allowSprite;
+        }
+        public void UpdateUnitInstruction(Unitinformation unitInfo)
+        {
+            const float GoalDistance = 0.7f;
+
+            if (unitInfo.Agent.remainingDistance < GoalDistance)
+            {
+                Finalize(unitInfo);
+                unitInfo.InstrucitonQueue.Dequeue();
+            }
+        }
+
+        public void Finalize(Unitinformation unitInfo)
+        {
+            if (allowSprite != null) { Destroy(allowSprite.gameObject); }
+        }
+    }
+    protected class UnitStopInstruction : iUnitInstruction
+    {
+        public void Initialize(Unitinformation unitInfo, Vector3 movePosition, SpriteRenderer allowSprite = null)
+        {
+            unitInfo.Animator.SetFloat("Speed", 0);
+            unitInfo.Agent.isStopped = true;
+        }
+        public void UpdateUnitInstruction(Unitinformation unitInfo)
+        {
+            bool b = TouchInputManager.Instance
+                .CompareToSelfTouchPhase(unitInfo.Unit.gameObject, TouchPhase.Ended);
+            if (b)
+            {
+                unitInfo.ReleaseQueue();
+                var newInstruction = new UnitMoveInstruction();
+                newInstruction.Initialize(unitInfo,unitInfo.TargetTower.position);
+                unitInfo.InstrucitonQueue.Enqueue(newInstruction);
+            }
+        }
+
+        public void Finalize(Unitinformation unitInfo)
+        {
+
+        }
+    }
+    #endregion
+
     protected TextMeshPro debugText;
 
     protected bool isInitialized;//unitが召喚エリアに置かれたらtrueに
     protected Transform targetTower;
     protected NavMeshAgent agent;
     protected Animator animator;
-    protected Queue<iUnitInstruction> instrucitonQueue;
+    Queue<iUnitInstruction> instrucitonQueue;
 
     /// <summary>
     /// ドラッグ開始時に呼ばれる.

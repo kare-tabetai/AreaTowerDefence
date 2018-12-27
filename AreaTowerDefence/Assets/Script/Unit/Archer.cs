@@ -5,11 +5,6 @@ using UnityEngine;
 
 public class Archer : Unit, iTouchEnd
 {
-    enum ArcherState
-    {
-        Progress,
-        Fight,
-    }
 
     [SerializeField]
     GameObject allow;
@@ -18,7 +13,21 @@ public class Archer : Unit, iTouchEnd
 
     List<Unit> unitInRange = new List<Unit>();
     [Disable, SerializeField]
-    ArcherState state;
+
+    public override void Initialize(int playerNum)
+    {
+        base.Initialize(playerNum);
+        isInitialized = true;
+        var colliders = GetComponentsInChildren<Collider>();
+        foreach (var col in colliders)
+        {
+            col.enabled = true;
+        }
+        agent.enabled = true;
+        targetTower = MainSceneManager.Instance.GetNearestOtherPlayerTower(PlayerNumber, transform.position);
+        agent.SetDestination(targetTower.position);
+        animator.SetFloat("Velocity", agent.speed);
+    }
 
     void Start ()
 	{
