@@ -3,41 +3,42 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class Walker : Unit, iTouchEnd
+public class Walker : Unit
 {
 
     [SerializeField]
     GameObject instantiatePrefab;
 
     GameObject instantiateArea;
-	void Start () {
+
+    public override void Initialize(int playerNum)
+    {
+        base.Initialize(playerNum);
+        var unitMoveCommand = new UnitMoveCommand();
+        unitMoveCommand
+            .Initialize(PackUnitInformation(), targetTower.transform.position);
+        commandQueue.Enqueue(unitMoveCommand);
+    }
+
+    void Start () {
+
     }
 
     void Update()
     {
         if (!isInitialized) { return; }
+
+        bool isTouched = TouchInputManager.Instance
+            .CompareToSelfTouchPhase(gameObject, TouchPhase.Ended);
+        if (isTouched&& instantiateArea==null)
+        {
+            movable = false;
+            InstantiateArea();
+        }
+
+        commandQueue.Peek().UpdateUnitInstruction(PackUnitInformation());
     }
 
-    public void TouchEnd(TouchInputManager.TouchInfo touchInfo)
-    {
-        if (!isInitialized) { return; }
-
-        if (touchInfo.PlayerNum != PlayerNumber)
-        {
-            print("自分が生成したオブジェクト以外がタッチされました");
-            return;
-        }
-        if (instantiateArea != null)
-        {
-            print("instaatiateAreaが生成されています");
-            return;
-        }
-        agent.isStopped = true;
-        animator.SetFloat("Velocity", 0);
-        InstantiateArea();
-    }
-
-    //AIからTouchBeginを介さずにアクセスさせるためpublic
     void InstantiateArea()
     {
         const float OffsetY = 0.05f;//重なってちらつくのを防ぐため
