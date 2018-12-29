@@ -4,22 +4,24 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class Wizard : Unit, iTouchEnd
+public class Wizard : Unit
 {
-    enum WizardState
-    {
-        Progress,
-        Fight,
-    }
-
     [SerializeField]
     GameObject magicBullet;
     [SerializeField]
-    float speed=5;
+    float attackRag;
 
     List<Unit> unitInRange = new List<Unit>();
-    [Disable, SerializeField]
-    WizardState state;
+
+    public override void Initialize(int playerNum)
+    {
+        base.Initialize(playerNum);
+        var unitMoveCommand = new UnitMoveCommand();
+        unitMoveCommand
+            .Initialize(PackUnitInformation(), targetTower.transform.position);
+        commandQueue.Enqueue(unitMoveCommand);
+    }
+
     void Start () {
 
     }
@@ -27,64 +29,43 @@ public class Wizard : Unit, iTouchEnd
     void Update()
     {
         if (!isInitialized) { return; }
-
-        StateCheck();
-        debugText.text = state.ToString();
-        switch (state)
-        {
-            case WizardState.Progress:
-                break;
-
-            case WizardState.Fight:
-                Fight();
-                break;
-        }
-    }
-
-    void StateCheck()
-    {
         unitInRange.RemoveAll(item => item == null);//nullを削除
-        if (unitInRange.Count == 0)
+
+        bool isTouched = TouchInputManager.Instance
+            .CompareToSelfTouchPhase(gameObject, TouchPhase.Ended);
+        if (isTouched)
         {
-            if (state == WizardState.Progress) { return; }
-            state = WizardState.Progress;
-            agent.isStopped = false;
-            agent.SetDestination(targetTower.position);
-            animator.SetBool("Attack",false);
-            animator.SetFloat("Velocity", agent.speed);
+            movable = !movable;
         }
-        else
-        {
-            if (state == WizardState.Fight) { return; }
-            state = WizardState.Fight;
-            agent.isStopped = true;
-            animator.SetBool("Attack",true);
-        }
+
+        CommandCheck();
     }
 
-    void Fight()
+    void CommandCheck()
     {
-        Unit nearestUnit;
-        var sqrDist = GetNearestUnit(this,unitInRange,out nearestUnit);
-        Attack(nearestUnit);
-    }
+        if (commandQueue.Count == 0) { return; }
 
-    float attackTimer = 0;
-    void Attack(Unit attackTarget)
-    {
-        const float AttackRag = 1.0f;
-        const float MagicBulletOffsetY = 0.5f;
-        print("attack");
+        debugText.text = commandQueue.Peek().ToString();
 
-        attackTimer += Time.deltaTime;
-        if (AttackRag <= attackTimer)
+        var currentCommand = commandQueue.Peek();
+        var CommandType = currentCommand.GetType();
+
+        if (CommandType != typeof(UnitFightingCommand))
         {
-            attackTimer = 0f;
-            var bullet = Instantiate(magicBullet,MainSceneManager.Instance.ActorNode).GetComponent<MagicBullet>();
-            var instPos = transform.position;
-            instPos.y += MagicBulletOffsetY;
-            bullet.transform.position = instPos;
-            bullet.Initialize(PlayerNumber, attackTarget.transform);
+            if (unitInRange.Count != 0)
+            {
+                HasRangeUnitInformation unitInfo = PackHasRangeUnitInformation(unitInRange);
+                unitInfo.UnitInRange = unitInRange;
+                unitInfo.ReleaseQueue();
+                var newInstruction = new UnitFightingCommand();
+                newInstruction.Initialize(unitInfo, attackRag, magicBullet);
+                commandQueue.Enqueue(newInstruction);
+            }
+        }
+
+        if (commandQueue.Count != 0)
+        {
+            commandQueue.Peek().UpdateUnitInstruction(PackUnitInformation());
         }
     }
 
@@ -111,20 +92,6 @@ public class Wizard : Unit, iTouchEnd
             if (unit == null) { return; }
             if (unit.PlayerNumber == PlayerNumber) { return; }
             unitInRange.Remove(unit);
-        }
-    }
-
-    public void TouchEnd(TouchInputManager.TouchInfo touchInfo)
-    {
-        if (agent.speed == 0)
-        {
-            agent.speed = speed;
-            animator.SetFloat("Velocity", agent.speed);
-        }
-        else
-        {
-            agent.speed = 0;
-            animator.SetFloat("Velocity", agent.speed);
         }
     }
 }

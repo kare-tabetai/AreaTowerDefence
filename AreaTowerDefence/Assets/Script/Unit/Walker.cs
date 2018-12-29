@@ -36,6 +36,7 @@ public class Walker : Unit
             InstantiateArea();
         }
 
+        if (commandQueue.Count == 0) { return; }
         commandQueue.Peek().UpdateUnitInstruction(PackUnitInformation());
     }
 

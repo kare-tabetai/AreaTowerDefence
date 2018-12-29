@@ -62,8 +62,10 @@ public class Archer : Unit
             }
         }
 
-        //currentCommandが更新されているかもしれないからPeek
-        commandQueue.Peek().UpdateUnitInstruction(PackUnitInformation());
+        if (commandQueue.Count != 0)
+        {
+            commandQueue.Peek().UpdateUnitInstruction(PackUnitInformation());
+        }
     }
 
     private void OnTriggerEnter(Collider other)

@@ -32,10 +32,10 @@ public class Soldier : Unit {
         if (!isInitialized) { return; }
         unitInRange.RemoveAll(item => item == null);//nullを削除
 
-        StateCheck();
+        CommandCheck();
     }
 
-    void StateCheck()
+    void CommandCheck()
     {
         if (commandQueue.Count == 0) { return; }
 
@@ -58,7 +58,10 @@ public class Soldier : Unit {
         }
 
         //currentCommandが更新されているかもしれないからPeek
-        commandQueue.Peek().UpdateUnitInstruction(PackUnitInformation());
+        if (commandQueue.Count != 0)
+        {
+            commandQueue.Peek().UpdateUnitInstruction(PackUnitInformation());
+        }
     }
 
     private void OnTriggerEnter(Collider other)
