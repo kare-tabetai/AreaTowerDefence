@@ -15,6 +15,7 @@ public class UnitInformation
     public int PlayerNum;
     public int Hp;
     public Unit Unit;
+    public bool Movable;
     public Queue<iUnitCommand> InstrucitonQueue;
     public Transform TargetTower;
     public NavMeshAgent Agent;

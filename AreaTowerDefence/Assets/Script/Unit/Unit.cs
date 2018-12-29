@@ -17,11 +17,17 @@ public abstract class Unit : HpActor,iTouchBegin,iTouchMoved {
     protected Transform targetTower;
     protected NavMeshAgent agent;
     protected Animator animator;
+
     /// <summary>
     /// これがステートのQueue,
     /// Unitの子やiUnitInstructionの子でDequeue,Enqueue,Clearして管理する
     /// </summary>
     protected Queue<iUnitCommand> commandQueue=new Queue<iUnitCommand>();
+
+    /// <summary>
+    /// 移動できるかtrueでも攻撃時などは移動できません
+    /// </summary>
+    protected bool movable = true;
 
     /// <summary>
     /// ドラッグ開始時に呼ばれる.
@@ -78,6 +84,7 @@ public abstract class Unit : HpActor,iTouchBegin,iTouchMoved {
         var unitInformation = new UnitInformation();
         unitInformation.PlayerNum = PlayerNumber;
         unitInformation.Unit = this;
+        unitInformation.Movable = movable;
         unitInformation.InstrucitonQueue = commandQueue;
         unitInformation.TargetTower = targetTower;
         unitInformation.Agent = agent;

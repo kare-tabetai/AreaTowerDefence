@@ -35,24 +35,41 @@ public class Archer : Unit
     void Update()
     {
         if (!isInitialized) { return; }
-        if (commandQueue.Count==0) { return; }
-        var currentInstruction = commandQueue.Peek();
-        debugText.text = currentInstruction.ToString();
 
-        if (unitInRange.Count != 0)
+        bool isTouched = TouchInputManager.Instance
+            .CompareToSelfTouchPhase(gameObject, TouchPhase.Ended);
+        if (isTouched)
         {
-            if (currentInstruction.GetType()==typeof(UnitFightCommand))
-            { return; }
-            HasRangeUnitInformation unitInfo = PackHasRangeUnitInformation(unitInRange);
-            unitInfo.UnitInRange = unitInRange;
-            unitInfo.ReleaseQueue();
-            var newInstruction = new UnitFightCommand();
-            newInstruction.Initialize(unitInfo, attackRag, allow);
-            commandQueue.Enqueue(newInstruction);
-        }else
-        {
-            currentInstruction.UpdateUnitInstruction(PackUnitInformation());
+            movable = !movable;
         }
+
+        CommandCheck();
+    }
+
+    void CommandCheck()
+    {
+        if (commandQueue.Count == 0) { return; }
+
+        debugText.text = commandQueue.Peek().ToString();
+
+        var currentCommand = commandQueue.Peek();
+        var CommandType = currentCommand.GetType();
+
+        if (CommandType != typeof(UnitFightingCommand))
+        {
+            if (unitInRange.Count != 0)
+            {
+                HasRangeUnitInformation unitInfo = PackHasRangeUnitInformation(unitInRange);
+                unitInfo.UnitInRange = unitInRange;
+                unitInfo.ReleaseQueue();
+                var newInstruction = new UnitFightingCommand();
+                newInstruction.Initialize(unitInfo, attackRag, allow);
+                commandQueue.Enqueue(newInstruction);
+            }
+        }
+
+        //currentCommandが更新されているかもしれないからPeek
+        commandQueue.Peek().UpdateUnitInstruction(PackUnitInformation());
     }
 
     private void OnTriggerEnter(Collider other)

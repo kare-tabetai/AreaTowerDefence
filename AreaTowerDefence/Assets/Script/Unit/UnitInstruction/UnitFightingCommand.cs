@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class UnitFightCommand : iUnitCommand
+public class UnitFightingCommand : iUnitCommand
 {
     float attackTimer = 0;
     float attackRag = 0;
@@ -26,8 +26,11 @@ public class UnitFightCommand : iUnitCommand
         this.attackRag = attackRag;
         this.bulletPrefab = bulletPrefab;
     }
+
     public void UpdateUnitInstruction(UnitInformation unitInfo)
     {
+        Debug.Assert(unitInfo.GetType() == typeof(HasRangeUnitInformation));
+
         //キャスト可能なはず
         var rangehasUnitInfo = (HasRangeUnitInformation)unitInfo;
 
@@ -43,6 +46,7 @@ public class UnitFightCommand : iUnitCommand
         var sqrDist = Unit.GetNearestUnit(rangehasUnitInfo.Unit, rangehasUnitInfo.UnitInRange, out nearestUnit);
         Attack(rangehasUnitInfo, nearestUnit);
     }
+
     void Attack(HasRangeUnitInformation unitInfo, Unit attackTarget)
     {
         const float BulletOffsetY = 1f;
@@ -72,6 +76,7 @@ public class UnitFightCommand : iUnitCommand
 
         }
     }
+
     public void Finalize(UnitInformation unitInfo)
     {
 

@@ -11,6 +11,8 @@ public class UnitMoveCommand : iUnitCommand
 
     public void Initialize(UnitInformation unitInfo, Vector3 movePosition, SpriteRenderer allowSprite = null)
     {
+        if (!unitInfo.Movable) { return; }
+
         unitInfo.Animator.SetFloat("Velocity", unitInfo.Agent.speed);
         unitInfo.Agent.isStopped = false;
         unitInfo.Agent.SetDestination(movePosition);
@@ -20,23 +22,27 @@ public class UnitMoveCommand : iUnitCommand
     {
         const float GoalDistance = 0.7f;
 
+        if (unitInfo.Movable)
+        {
+            unitInfo.Animator.SetFloat("Velocity", unitInfo.Agent.speed);
+            unitInfo.Agent.isStopped = false;
+        }
+        else
+        {
+            unitInfo.Animator.SetFloat("Velocity", 0);
+            unitInfo.Agent.isStopped = true;
+        }
+
         var distance = unitInfo.Agent.destination - unitInfo.Unit.transform.position;
         var sqeDist = distance.sqrMagnitude;
+        //目的地到達
         if (sqeDist < GoalDistance * GoalDistance)
         {
             Finalize(unitInfo);
             unitInfo.InstrucitonQueue.Dequeue();
             return;
         }
-        bool b = TouchInputManager.Instance
-            .CompareToSelfTouchPhase(unitInfo.Unit.gameObject, TouchPhase.Ended);
-        if (b)
-        {
-            unitInfo.ReleaseQueue();
-            var newInstruction = new UnitStopCommand();
-            newInstruction.Initialize(unitInfo);
-            unitInfo.InstrucitonQueue.Enqueue(newInstruction);
-        }
+        
     }
     public void Finalize(UnitInformation unitInfo)
     {
