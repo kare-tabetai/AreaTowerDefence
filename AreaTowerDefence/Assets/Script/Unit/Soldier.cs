@@ -6,15 +6,22 @@ using System.Linq;
 
 public class Soldier : Unit {
 
-    enum SoldierState
-    {
-        Progress,
-        Fight,
-    }
+    [SerializeField]
+    float attackRag = 1;
+    [SerializeField]
+    int attackPower = 80;
 
     List<Unit> unitInRange = new List<Unit>();
-    [Disable,SerializeField]
-    SoldierState state;
+
+    public override void Initialize(int playerNum)
+    {
+        base.Initialize(playerNum);
+        var unitMoveCommand = new UnitMoveCommand();
+        unitMoveCommand
+            .Initialize(PackUnitInformation(), targetTower.transform.position);
+        commandQueue.Enqueue(unitMoveCommand);
+    }
+
     void Start()
     {
 
@@ -23,69 +30,41 @@ public class Soldier : Unit {
     void Update()
     {
         if (!isInitialized) { return; }
+        unitInRange.RemoveAll(item => item == null);//nullを削除
 
         StateCheck();
-        debugText.text = state.ToString();
-        switch (state)
-        {
-            case SoldierState.Progress:
-                break;
-
-            case SoldierState.Fight:
-                Fight();
-                break;
-        }
     }
 
     void StateCheck()
     {
-        unitInRange.RemoveAll(item => item == null);//nullを削除
-        if (unitInRange.Count == 0)
-        {
-            if(state == SoldierState.Progress) { return; }
-            state = SoldierState.Progress;
-            agent.isStopped = false;
-            agent.SetDestination(targetTower.position);
-            animator.SetFloat("Velocity", agent.speed);
-            animator.SetBool("Attack", false);
-        }
-        else
-        {
-            if (state == SoldierState.Fight) { return; }
-            state = SoldierState.Fight;
-            agent.isStopped = true;
-            animator.SetBool("Attack", true);
-        }
-    }
+        if (commandQueue.Count == 0) { return; }
 
-    void Fight()
-    {
-        Unit nearestUnit;
-        var sqrDist = GetNearestUnit(this, unitInRange, out nearestUnit);
-        if(unitInRange.Any(item=>item==nearestUnit))
-        {
-            Attack(nearestUnit);
-        }
-    }
+        debugText.text = commandQueue.Peek().ToString();
 
-    float attackTimer = 0;
-    void Attack(Unit attackTarget)
-    {
-        const float AttackRag = 1.0f;
-        const int AttackPower = 80;
-        attackTimer += Time.deltaTime;
-        if (AttackRag <= attackTimer)
+        var currentCommand = commandQueue.Peek();
+        var CommandType = currentCommand.GetType();
+
+        if (CommandType != typeof(UnitFightingCommand))
         {
-            attackTimer = 0f;
-            attackTarget.Damage(AttackPower, this);
+            if (unitInRange.Count != 0)
+            {
+                HasRangeUnitInformation unitInfo = PackHasRangeUnitInformation(unitInRange);
+                unitInfo.UnitInRange = unitInRange;
+                unitInfo.ReleaseQueue();
+                var newInstruction = new UnitFightingCommand();
+                newInstruction.Initialize(unitInfo, attackRag,attackPower);
+                commandQueue.Enqueue(newInstruction);
+            }
         }
+
+        //currentCommandが更新されているかもしれないからPeek
+        commandQueue.Peek().UpdateUnitInstruction(PackUnitInformation());
     }
 
     private void OnTriggerEnter(Collider other)
     {
         if (!isInitialized) { return; }
 
-        print("hit");
         if (other.tag == "Actor")
         {
             print("actor");
