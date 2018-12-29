@@ -9,7 +9,7 @@ using System;
 /// <summary>
 /// 動く駒を作るときはこれを継承
 /// </summary>
-public abstract class Unit : HpActor,iTouchBegin,iTouchMoved {
+public abstract class Unit : HpActor {
 
     protected TextMeshPro debugText;
 
@@ -19,10 +19,9 @@ public abstract class Unit : HpActor,iTouchBegin,iTouchMoved {
     protected Animator animator;
 
     /// <summary>
-    /// これがステートのQueue,
-    /// Unitの子やiUnitInstructionの子でDequeue,Enqueue,Clearして管理する
+    /// Dequeue,Enqueue,Clearして管理する
     /// </summary>
-    protected Queue<iUnitCommand> commandQueue=new Queue<iUnitCommand>();
+    public Queue<iUnitCommand> CommandQueue=new Queue<iUnitCommand>();
 
     /// <summary>
     /// 移動できるかtrueでも攻撃時などは移動できません
@@ -34,7 +33,7 @@ public abstract class Unit : HpActor,iTouchBegin,iTouchMoved {
     /// AiActorCOntrollerでStartが呼ばれる前に呼びたいので
     /// 明示的呼び出しできるようにしている
     /// </summary>
-    public void UnitStart()
+    public void Instantiated()
     {
         debugText = GetComponentInChildren<TextMeshPro>();
         agent = GetComponent<NavMeshAgent>();
@@ -65,27 +64,13 @@ public abstract class Unit : HpActor,iTouchBegin,iTouchMoved {
         animator.SetFloat("Velocity", agent.speed);
     }
 
-    public void TouchBegin(TouchInputManager.TouchInfo touchInfo)
-    {
-        if (!isInitialized) { return; }
-        PlayerActorController playerActorController 
-            = (PlayerActorController)MainSceneManager.Instance
-            .Controllers[touchInfo.PlayerNum];
-        playerActorController.InstantiatedUnitBeginDrag(this);
-    }
-
-    public void TouchMoved(TouchInputManager.TouchInfo touchInfo)
-    {
-        if (!isInitialized) { return; }
-    }
-
-    protected virtual UnitInformation PackUnitInformation()
+    public UnitInformation PackUnitInformation()
     {
         var unitInformation = new UnitInformation();
         unitInformation.PlayerNum = PlayerNumber;
         unitInformation.Unit = this;
         unitInformation.Movable = movable;
-        unitInformation.InstrucitonQueue = commandQueue;
+        unitInformation.InstrucitonQueue = CommandQueue;
         unitInformation.TargetTower = targetTower;
         unitInformation.Agent = agent;
         unitInformation.Animator = animator;

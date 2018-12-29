@@ -42,7 +42,7 @@ public class AiActorController : ActorController
                 pos.y = OffsetY;
                 instantiatedObject.transform.position = pos;
                 var unitComponent = instantiatedObject.GetComponent<Unit>();
-                unitComponent.UnitStart();
+                unitComponent.Instantiated();
                 unitComponent.Initialize(PlayerNumber);
                 return;
             }

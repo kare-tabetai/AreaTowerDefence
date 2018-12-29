@@ -17,7 +17,7 @@ public class Walker : Unit
         var unitMoveCommand = new UnitMoveCommand();
         unitMoveCommand
             .Initialize(PackUnitInformation(), targetTower.transform.position);
-        commandQueue.Enqueue(unitMoveCommand);
+        CommandQueue.Enqueue(unitMoveCommand);
     }
 
     void Start () {
@@ -36,8 +36,8 @@ public class Walker : Unit
             InstantiateArea();
         }
 
-        if (commandQueue.Count == 0) { return; }
-        commandQueue.Peek().UpdateUnitInstruction(PackUnitInformation());
+        if (CommandQueue.Count == 0) { return; }
+        CommandQueue.Peek().UpdateUnitInstruction(PackUnitInformation());
     }
 
     void InstantiateArea()

@@ -7,16 +7,15 @@ public class UnitMoveCommand : iUnitCommand
     /// <summary>
     /// この移動を示す矢印スプライトあれば終了時破棄する
     /// </summary>
-    SpriteRenderer allowSprite;
+    SpriteRenderer[] allows;
 
-    public void Initialize(UnitInformation unitInfo, Vector3 movePosition, SpriteRenderer allowSprite = null)
+    public void Initialize(UnitInformation unitInfo, Vector3 destination,bool drawAllow =false)
     {
         if (!unitInfo.Movable) { return; }
 
         unitInfo.Animator.SetFloat("Velocity", unitInfo.Agent.speed);
         unitInfo.Agent.isStopped = false;
-        unitInfo.Agent.SetDestination(movePosition);
-        this.allowSprite = allowSprite;
+        unitInfo.Agent.SetDestination(destination);
     }
     public void UpdateUnitInstruction(UnitInformation unitInfo)
     {

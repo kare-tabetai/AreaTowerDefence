@@ -8,8 +8,16 @@ public class PlayerActorController : ActorController {
     int unitNum = 0;
     [SerializeField,Disable,Tooltip("ドラッグして選択中の召喚しようとしているUnit")]
     UnitData draggingInstUnitData;
-    [Tooltip("ドラッグして選択中の召喚しようとしているUnitの実体")]
+
+    /// <summary>
+    /// ドラッグして選択中の召喚しようとしているUnitの実体
+    /// </summary>
     GameObject draggingInstUnit;
+
+    /// <summary>
+    /// 移動させるためなどにつまんでいる,生成,初期化済みunit
+    /// </summary>
+    Unit draggingIntializedUnit;
 
     [Tooltip("ActorをDragしていればtrue,カメラ移動でなんかつかんでいるかを見る用")]
     bool isActorDragging;
@@ -27,12 +35,7 @@ public class PlayerActorController : ActorController {
         draggingInstUnitData = instUnit;
         draggingInstUnit = Instantiate(instUnit.InstantiateUnit);
         var unit = draggingInstUnit.GetComponent<Unit>();
-        unit.UnitStart();
-        isActorDragging = true;
-    }
-
-    public void InstantiatedUnitBeginDrag(Unit unit)
-    {
+        unit.Instantiated();
         isActorDragging = true;
     }
 
@@ -67,8 +70,16 @@ public class PlayerActorController : ActorController {
         {
             touchObject.TouchBegin(touchInfo);
         }
+
+        var unit = touchInfo.RayCastInfo.collider.GetComponent<Unit>();
+        if (unit != null)
+        {
+            draggingIntializedUnit = unit;
+            isActorDragging = true;
+        }
     }
 
+    //wip
     void TouchMoved(TouchInputManager.TouchInfo touchInfo)
     {
         if (!touchInfo.ObjectHit) { return; }
@@ -81,6 +92,22 @@ public class PlayerActorController : ActorController {
         if (draggingInstUnit != null)
         {
             draggingInstUnit.transform.position = touchInfo.RayCastInfo.point;
+        }
+        if (draggingIntializedUnit != null)
+        {
+            const float DestinationMinLength = 1.0f;
+
+            var destinationPos = touchInfo.RayCastInfo.point;
+            Vector3 vec =
+                destinationPos - draggingIntializedUnit.transform.position;
+            float sqrDist = vec.sqrMagnitude;
+            if(DestinationMinLength * DestinationMinLength <=sqrDist)
+            {
+                var moveCommand = new UnitMoveCommand();
+                var unitInfo = draggingIntializedUnit.PackUnitInformation();
+                moveCommand.Initialize(unitInfo, destinationPos, true);
+                draggingIntializedUnit.CommandQueue.Enqueue(moveCommand);
+            }
         }
     }
 
