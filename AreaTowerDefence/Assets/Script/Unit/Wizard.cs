@@ -9,9 +9,9 @@ public class Wizard : Unit
     [SerializeField]
     GameObject magicBullet;
     [SerializeField]
-    float attackRag;
+    float attackRag=1;
 
-    List<Unit> rangiInUnitList = new List<Unit>();
+    List<Unit> rangeInUnitList = new List<Unit>();
 
     public override void Initialize(int playerNum)
     {
@@ -29,7 +29,7 @@ public class Wizard : Unit
     void Update()
     {
         if (!isInitialized) { return; }
-        rangiInUnitList.RemoveAll(item => item == null);//nullを削除
+        rangeInUnitList.RemoveAll(item => item == null);//nullを削除
 
         bool isTouched = TouchInputManager.Instance
             .CompareToSelfTouchPhase(gameObject, TouchPhase.Ended);
@@ -52,12 +52,12 @@ public class Wizard : Unit
 
         if (CommandType != typeof(UnitFightingCommand))
         {
-            if (rangiInUnitList.Count != 0)
+            if (rangeInUnitList.Count != 0)
             {
                 var unitInfo = PackUnitInformation();
                 unitInfo.ReleaseQueue();
                 var newInstruction = new UnitFightingCommand();
-                newInstruction.Initialize(unitInfo,rangiInUnitList, attackRag, magicBullet);
+                newInstruction.Initialize(unitInfo,rangeInUnitList, attackRag, magicBullet);
                 commandQueue.Enqueue(newInstruction);
             }
         }
@@ -77,7 +77,7 @@ public class Wizard : Unit
             var unit = other.GetComponent<Unit>();
             if (unit == null) { return; }
             if (unit.PlayerNumber == PlayerNumber) { return; }
-            rangiInUnitList.Add(unit);
+            rangeInUnitList.Add(unit);
         }
     }
 
@@ -90,7 +90,7 @@ public class Wizard : Unit
             var unit = other.GetComponent<Unit>();
             if (unit == null) { return; }
             if (unit.PlayerNumber == PlayerNumber) { return; }
-            rangiInUnitList.Remove(unit);
+            rangeInUnitList.Remove(unit);
         }
     }
 }

@@ -11,7 +11,7 @@ public class Soldier : Unit {
     [SerializeField]
     int attackPower = 80;
 
-    List<Unit> unitInRange = new List<Unit>();
+    List<Unit> rangeInUnitList = new List<Unit>();
 
     public override void Initialize(int playerNum)
     {
@@ -30,7 +30,7 @@ public class Soldier : Unit {
     void Update()
     {
         if (!isInitialized) { return; }
-        unitInRange.RemoveAll(item => item == null);//nullを削除
+        rangeInUnitList.RemoveAll(item => item == null);//nullを削除
 
         CommandCheck();
     }
@@ -46,12 +46,12 @@ public class Soldier : Unit {
 
         if (CommandType != typeof(UnitFightingCommand))
         {
-            if (unitInRange.Count != 0)
+            if (rangeInUnitList.Count != 0)
             {
                 UnitInformation unitInfo = PackUnitInformation();
                 unitInfo.ReleaseQueue();
                 var newInstruction = new UnitFightingCommand();
-                newInstruction.Initialize(unitInfo, unitInRange, attackRag,attackPower);
+                newInstruction.Initialize(unitInfo, rangeInUnitList, attackRag,attackPower);
                 commandQueue.Enqueue(newInstruction);
             }
         }
@@ -73,7 +73,7 @@ public class Soldier : Unit {
             var unit = other.GetComponent<Unit>();
             if (unit==null) { return; }
             if (unit.PlayerNumber == PlayerNumber) { return; }
-            unitInRange.Add(unit);
+            rangeInUnitList.Add(unit);
         }
     }
 
@@ -86,7 +86,7 @@ public class Soldier : Unit {
             var unit = other.GetComponent<Unit>();
             if (unit == null) { return; }
             if (unit.PlayerNumber == PlayerNumber) { return; }
-            unitInRange.Remove(unit);
+            rangeInUnitList.Remove(unit);
         }
     }
 }

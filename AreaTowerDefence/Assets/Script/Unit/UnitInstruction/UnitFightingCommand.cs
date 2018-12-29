@@ -11,21 +11,21 @@ public class UnitFightingCommand : iUnitCommand
     /// nullなら通常攻撃をする
     /// </summary>
     GameObject bulletPrefab;
-    List<Unit> unitInRange;
+    List<Unit> rangeInUnitList;
 
-    public void Initialize(UnitInformation unitInfo, List<Unit> unitInRange, float attackRag, int attackPower)
+    public void Initialize(UnitInformation unitInfo, List<Unit> rangeInUnitList, float attackRag, int attackPower)
     {
         unitInfo.Animator.SetBool("Attack", true);
         unitInfo.Agent.isStopped = true;
-        this.unitInRange = unitInRange;
+        this.rangeInUnitList = rangeInUnitList;
         this.attackRag = attackRag;
         this.attackPower = attackPower;
     }
-    public void Initialize(UnitInformation unitInfo, List<Unit> unitInRange, float attackRag, GameObject bulletPrefab)
+    public void Initialize(UnitInformation unitInfo, List<Unit> rangeInUnitList, float attackRag, GameObject bulletPrefab)
     {
         unitInfo.Animator.SetBool("Attack", true);
         unitInfo.Agent.isStopped = true;
-        this.unitInRange = unitInRange;
+        this.rangeInUnitList = rangeInUnitList;
         this.attackRag = attackRag;
         this.bulletPrefab = bulletPrefab;
     }
@@ -34,7 +34,7 @@ public class UnitFightingCommand : iUnitCommand
     {
 
         //キャスト可能なはず
-        if (unitInRange.Count == 0)
+        if (rangeInUnitList.Count == 0)
         {
             Finalize(unitInfo);
             unitInfo.InstrucitonQueue.Dequeue();
@@ -43,7 +43,7 @@ public class UnitFightingCommand : iUnitCommand
             return;
         }
         Unit nearestUnit;
-        var sqrDist = Unit.GetNearestUnit(unitInfo.Unit, unitInRange, out nearestUnit);
+        var sqrDist = Unit.GetNearestUnit(unitInfo.Unit, rangeInUnitList, out nearestUnit);
         Attack(unitInfo, nearestUnit);
     }
 
