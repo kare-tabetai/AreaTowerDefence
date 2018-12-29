@@ -15,17 +15,10 @@ public class Archer : Unit
     public override void Initialize(int playerNum)
     {
         base.Initialize(playerNum);
-        isInitialized = true;
-        var colliders = GetComponentsInChildren<Collider>();
-        foreach (var col in colliders)
-        {
-            col.enabled = true;
-        }
-        agent.enabled = true;
-        targetTower = MainSceneManager.Instance.GetNearestOtherPlayerTower(PlayerNumber, transform.position);
-        var unitMoveInstruction = new UnitMoveCommand();
-        unitMoveInstruction.Initialize(PackUnitInformation(),targetTower.transform.position);
-        commandQueue.Enqueue(unitMoveInstruction);
+        var unitMoveCommand = new UnitMoveCommand();
+        unitMoveCommand
+            .Initialize(PackUnitInformation(),targetTower.transform.position);
+        commandQueue.Enqueue(unitMoveCommand);
     }
 
     void Start ()
