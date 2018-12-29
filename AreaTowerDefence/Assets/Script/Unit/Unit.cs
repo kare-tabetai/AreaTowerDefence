@@ -21,7 +21,7 @@ public abstract class Unit : HpActor,iTouchBegin,iTouchMoved {
     /// これがステートのQueue,
     /// Unitの子やiUnitInstructionの子でDequeue,Enqueue,Clearして管理する
     /// </summary>
-    protected Queue<iUnitCommand> instrucitonQueue=new Queue<iUnitCommand>();
+    protected Queue<iUnitCommand> commandQueue=new Queue<iUnitCommand>();
 
     /// <summary>
     /// ドラッグ開始時に呼ばれる.
@@ -78,7 +78,7 @@ public abstract class Unit : HpActor,iTouchBegin,iTouchMoved {
         var unitInformation = new UnitInformation();
         unitInformation.PlayerNum = PlayerNumber;
         unitInformation.Unit = this;
-        unitInformation.InstrucitonQueue = instrucitonQueue;
+        unitInformation.InstrucitonQueue = commandQueue;
         unitInformation.TargetTower = targetTower;
         unitInformation.Agent = agent;
         unitInformation.Animator = animator;
@@ -89,7 +89,7 @@ public abstract class Unit : HpActor,iTouchBegin,iTouchMoved {
         var unitInformation = new HasRangeUnitInformation();
         unitInformation.PlayerNum = PlayerNumber;
         unitInformation.Unit = this;
-        unitInformation.InstrucitonQueue = instrucitonQueue;
+        unitInformation.InstrucitonQueue = commandQueue;
         unitInformation.TargetTower = targetTower;
         unitInformation.Agent = agent;
         unitInformation.Animator = animator;

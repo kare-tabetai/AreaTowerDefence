@@ -25,7 +25,7 @@ public class Archer : Unit
         targetTower = MainSceneManager.Instance.GetNearestOtherPlayerTower(PlayerNumber, transform.position);
         var unitMoveInstruction = new UnitMoveCommand();
         unitMoveInstruction.Initialize(PackUnitInformation(),targetTower.transform.position);
-        instrucitonQueue.Enqueue(unitMoveInstruction);
+        commandQueue.Enqueue(unitMoveInstruction);
     }
 
     void Start ()
@@ -35,8 +35,8 @@ public class Archer : Unit
     void Update()
     {
         if (!isInitialized) { return; }
-        if (instrucitonQueue.Count==0) { return; }
-        var currentInstruction = instrucitonQueue.Peek();
+        if (commandQueue.Count==0) { return; }
+        var currentInstruction = commandQueue.Peek();
         debugText.text = currentInstruction.ToString();
 
         if (unitInRange.Count != 0)
@@ -48,7 +48,7 @@ public class Archer : Unit
             unitInfo.ReleaseQueue();
             var newInstruction = new UnitFightCommand();
             newInstruction.Initialize(unitInfo, attackRag, allow);
-            instrucitonQueue.Enqueue(newInstruction);
+            commandQueue.Enqueue(newInstruction);
         }else
         {
             currentInstruction.UpdateUnitInstruction(PackUnitInformation());
