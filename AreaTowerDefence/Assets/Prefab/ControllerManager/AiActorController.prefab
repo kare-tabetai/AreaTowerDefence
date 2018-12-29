@@ -56,7 +56,8 @@ MonoBehaviour:
   costCounter: {fileID: 0}
   ThemeColor: {r: 0.38666677, g: 0.27843142, b: 1, a: 1}
   units:
-  - {fileID: 11400000, guid: 96678304b4563f04faa19175e55158da, type: 2}
-  - {fileID: 11400000, guid: 9dedb954d784f4f458bfd7e16cd2906f, type: 2}
-  - {fileID: 11400000, guid: a619a6012bd642640a5650cbc31c566d, type: 2}
-  instantiateRug: 2
+  - {fileID: 11400000, guid: 5bb27dc9bf63354489ce133ac61b01a5, type: 2}
+  - {fileID: 11400000, guid: 803d0d96a567d214dbf65682e5851627, type: 2}
+  - {fileID: 11400000, guid: 4e6016257e4191148aa976b662c3a959, type: 2}
+  instantiateRug: 5
+  unitNum: 0

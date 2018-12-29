@@ -91,18 +91,6 @@ public abstract class Unit : HpActor,iTouchBegin,iTouchMoved {
         unitInformation.Animator = animator;
         return unitInformation;
     }
-    protected virtual HasRangeUnitInformation PackHasRangeUnitInformation(List<Unit> unitInRange)
-    {
-        var unitInformation = new HasRangeUnitInformation();
-        unitInformation.PlayerNum = PlayerNumber;
-        unitInformation.Unit = this;
-        unitInformation.InstrucitonQueue = commandQueue;
-        unitInformation.TargetTower = targetTower;
-        unitInformation.Agent = agent;
-        unitInformation.Animator = animator;
-        unitInformation.UnitInRange = unitInRange;
-        return unitInformation;
-    }
 
     /// <summary>
     /// リストからselfに一番近いunitを取り出す

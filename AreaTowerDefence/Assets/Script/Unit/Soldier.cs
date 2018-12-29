@@ -48,11 +48,10 @@ public class Soldier : Unit {
         {
             if (unitInRange.Count != 0)
             {
-                HasRangeUnitInformation unitInfo = PackHasRangeUnitInformation(unitInRange);
-                unitInfo.UnitInRange = unitInRange;
+                UnitInformation unitInfo = PackUnitInformation();
                 unitInfo.ReleaseQueue();
                 var newInstruction = new UnitFightingCommand();
-                newInstruction.Initialize(unitInfo, attackRag,attackPower);
+                newInstruction.Initialize(unitInfo, unitInRange, attackRag,attackPower);
                 commandQueue.Enqueue(newInstruction);
             }
         }

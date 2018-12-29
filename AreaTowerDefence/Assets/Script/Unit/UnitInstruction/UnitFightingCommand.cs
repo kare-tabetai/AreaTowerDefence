@@ -11,43 +11,43 @@ public class UnitFightingCommand : iUnitCommand
     /// nullなら通常攻撃をする
     /// </summary>
     GameObject bulletPrefab;
+    List<Unit> unitInRange;
 
-    public void Initialize(UnitInformation unitInfo, float attackRag, int attackPower)
+    public void Initialize(UnitInformation unitInfo, List<Unit> unitInRange, float attackRag, int attackPower)
     {
         unitInfo.Animator.SetBool("Attack", true);
         unitInfo.Agent.isStopped = true;
+        this.unitInRange = unitInRange;
         this.attackRag = attackRag;
         this.attackPower = attackPower;
     }
-    public void Initialize(UnitInformation unitInfo, float attackRag, GameObject bulletPrefab)
+    public void Initialize(UnitInformation unitInfo, List<Unit> unitInRange, float attackRag, GameObject bulletPrefab)
     {
         unitInfo.Animator.SetBool("Attack", true);
         unitInfo.Agent.isStopped = true;
+        this.unitInRange = unitInRange;
         this.attackRag = attackRag;
         this.bulletPrefab = bulletPrefab;
     }
 
     public void UpdateUnitInstruction(UnitInformation unitInfo)
     {
-        Debug.Assert(unitInfo.GetType() == typeof(HasRangeUnitInformation));
 
         //キャスト可能なはず
-        var rangehasUnitInfo = (HasRangeUnitInformation)unitInfo;
-
-        if (rangehasUnitInfo.UnitInRange.Count == 0)
+        if (unitInRange.Count == 0)
         {
             Finalize(unitInfo);
             unitInfo.InstrucitonQueue.Dequeue();
-            rangehasUnitInfo.Agent.isStopped = false;
-            rangehasUnitInfo.Animator.SetBool("Attack", false);
+            unitInfo.Agent.isStopped = false;
+            unitInfo.Animator.SetBool("Attack", false);
             return;
         }
         Unit nearestUnit;
-        var sqrDist = Unit.GetNearestUnit(rangehasUnitInfo.Unit, rangehasUnitInfo.UnitInRange, out nearestUnit);
-        Attack(rangehasUnitInfo, nearestUnit);
+        var sqrDist = Unit.GetNearestUnit(unitInfo.Unit, unitInRange, out nearestUnit);
+        Attack(unitInfo, nearestUnit);
     }
 
-    void Attack(HasRangeUnitInformation unitInfo, Unit attackTarget)
+    void Attack(UnitInformation unitInfo, Unit attackTarget)
     {
         const float BulletOffsetY = 1f;
 

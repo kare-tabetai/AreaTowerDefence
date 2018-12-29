@@ -10,7 +10,7 @@ public class Archer : Unit
     [SerializeField]
     float attackRag = 1;
 
-    List<Unit> unitInRange = new List<Unit>();
+    List<Unit> rangiInUnitList = new List<Unit>();
 
     public override void Initialize(int playerNum)
     {
@@ -28,7 +28,7 @@ public class Archer : Unit
     void Update()
     {
         if (!isInitialized) { return; }
-        unitInRange.RemoveAll(item => item == null);//nullを削除
+        rangiInUnitList.RemoveAll(item => item == null);//nullを削除
 
         bool isTouched = TouchInputManager.Instance
             .CompareToSelfTouchPhase(gameObject, TouchPhase.Ended);
@@ -51,13 +51,12 @@ public class Archer : Unit
 
         if (CommandType != typeof(UnitFightingCommand))
         {
-            if (unitInRange.Count != 0)
+            if (rangiInUnitList.Count != 0)
             {
-                HasRangeUnitInformation unitInfo = PackHasRangeUnitInformation(unitInRange);
-                unitInfo.UnitInRange = unitInRange;
+                var unitInfo = PackUnitInformation();
                 unitInfo.ReleaseQueue();
                 var newInstruction = new UnitFightingCommand();
-                newInstruction.Initialize(unitInfo, attackRag, allow);
+                newInstruction.Initialize(unitInfo, rangiInUnitList, attackRag, allow);
                 commandQueue.Enqueue(newInstruction);
             }
         }
@@ -77,7 +76,7 @@ public class Archer : Unit
             var unit = other.GetComponent<Unit>();
             if (unit == null) { return; }
             if (unit.PlayerNumber == PlayerNumber) { return; }
-            unitInRange.Add(unit);
+            rangiInUnitList.Add(unit);
         }
     }
 
@@ -90,7 +89,7 @@ public class Archer : Unit
             var unit = other.GetComponent<Unit>();
             if (unit == null) { return; }
             if (unit.PlayerNumber == PlayerNumber) { return; }
-            unitInRange.Remove(unit);
+            rangiInUnitList.Remove(unit);
         }
     }
 }

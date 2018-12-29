@@ -7,10 +7,10 @@ using UnityEngine.AI;
 /// UnitInstructionに送る情報
 /// Unitが持っているデータで
 /// UnitInstructionが必要なものを全部送る
-/// Unitを継承した先で新たに必要なものができればこれを継承したものを送る
-/// 入力をUnit  処理,出力をUnitInstructionでさせる
+/// 1つずつ送ると面倒なのでPackしてるだけ
+/// 入力をUnit  処理をUnitInstructionでさせる
 /// </summary>
-public class UnitInformation
+public struct UnitInformation
 {
     public int PlayerNum;
     public int Hp;

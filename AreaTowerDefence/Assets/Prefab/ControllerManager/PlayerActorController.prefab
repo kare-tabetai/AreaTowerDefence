@@ -22,7 +22,7 @@ GameObject:
   - component: {fileID: 114661987728145498}
   m_Layer: 0
   m_Name: PlayerActorController
-  m_TagString: Untagged
+  m_TagString: Actor
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -55,4 +55,5 @@ MonoBehaviour:
   OwnTower: {fileID: 0}
   costCounter: {fileID: 0}
   ThemeColor: {r: 1, g: 0.27843142, b: 0.27843142, a: 1}
-  DraggingUnit: {fileID: 0}
+  unitNum: 0
+  draggingInstUnitData: {fileID: 0}

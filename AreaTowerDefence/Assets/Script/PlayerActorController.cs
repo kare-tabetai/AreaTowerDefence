@@ -116,7 +116,11 @@ public class PlayerActorController : ActorController {
         const int MaxUnitNum = 50;//unit数制限
 
         if (draggingInstUnitData == null) { return; }
-        if (MaxUnitNum <= unitNum) { return; }
+        if (MaxUnitNum <= unitNum)
+        {
+            print("生成数が限界です");
+            return;
+        }
 
         //予算が足りなければ帰る
         if (!costCounter.Pay(draggingInstUnitData.InstantiateCost))
