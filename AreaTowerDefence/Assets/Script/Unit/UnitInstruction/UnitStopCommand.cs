@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class UnitStopInstruction : iUnitInstruction
+public class UnitStopCommand : iUnitCommand
 {
     public void Initialize(UnitInformation unitInfo)
     {
@@ -16,7 +16,7 @@ public class UnitStopInstruction : iUnitInstruction
         if (b)
         {
             unitInfo.ReleaseQueue();
-            var newInstruction = new UnitMoveInstruction();
+            var newInstruction = new UnitMoveCommand();
             newInstruction.Initialize(unitInfo, unitInfo.TargetTower.position);
             unitInfo.InstrucitonQueue.Enqueue(newInstruction);
         }

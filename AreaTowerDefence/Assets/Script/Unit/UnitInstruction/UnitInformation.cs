@@ -15,7 +15,7 @@ public class UnitInformation
     public int PlayerNum;
     public int Hp;
     public Unit Unit;
-    public Queue<iUnitInstruction> InstrucitonQueue;
+    public Queue<iUnitCommand> InstrucitonQueue;
     public Transform TargetTower;
     public NavMeshAgent Agent;
     public Animator Animator;

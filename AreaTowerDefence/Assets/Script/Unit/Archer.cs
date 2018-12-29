@@ -23,7 +23,7 @@ public class Archer : Unit
         }
         agent.enabled = true;
         targetTower = MainSceneManager.Instance.GetNearestOtherPlayerTower(PlayerNumber, transform.position);
-        var unitMoveInstruction = new UnitMoveInstruction();
+        var unitMoveInstruction = new UnitMoveCommand();
         unitMoveInstruction.Initialize(PackUnitInformation(),targetTower.transform.position);
         instrucitonQueue.Enqueue(unitMoveInstruction);
     }
@@ -41,12 +41,12 @@ public class Archer : Unit
 
         if (unitInRange.Count != 0)
         {
-            if (currentInstruction.GetType()==typeof(UnitFightInstruction))
+            if (currentInstruction.GetType()==typeof(UnitFightCommand))
             { return; }
             HasRangeUnitInformation unitInfo = PackHasRangeUnitInformation(unitInRange);
             unitInfo.UnitInRange = unitInRange;
             unitInfo.ReleaseQueue();
-            var newInstruction = new UnitFightInstruction();
+            var newInstruction = new UnitFightCommand();
             newInstruction.Initialize(unitInfo, attackRag, allow);
             instrucitonQueue.Enqueue(newInstruction);
         }else

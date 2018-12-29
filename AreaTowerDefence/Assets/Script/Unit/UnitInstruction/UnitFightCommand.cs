@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class UnitFightInstruction : iUnitInstruction
+public class UnitFightCommand : iUnitCommand
 {
     float attackTimer = 0;
     float attackRag = 0;

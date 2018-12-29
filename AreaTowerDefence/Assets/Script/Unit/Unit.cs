@@ -21,7 +21,7 @@ public abstract class Unit : HpActor,iTouchBegin,iTouchMoved {
     /// これがステートのQueue,
     /// Unitの子やiUnitInstructionの子でDequeue,Enqueue,Clearして管理する
     /// </summary>
-    protected Queue<iUnitInstruction> instrucitonQueue=new Queue<iUnitInstruction>();
+    protected Queue<iUnitCommand> instrucitonQueue=new Queue<iUnitCommand>();
 
     /// <summary>
     /// ドラッグ開始時に呼ばれる.

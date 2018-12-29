@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class UnitMoveInstruction : iUnitInstruction
+public class UnitMoveCommand : iUnitCommand
 {
     /// <summary>
     /// この移動を示す矢印スプライトあれば終了時破棄する
@@ -33,7 +33,7 @@ public class UnitMoveInstruction : iUnitInstruction
         if (b)
         {
             unitInfo.ReleaseQueue();
-            var newInstruction = new UnitStopInstruction();
+            var newInstruction = new UnitStopCommand();
             newInstruction.Initialize(unitInfo);
             unitInfo.InstrucitonQueue.Enqueue(newInstruction);
         }
