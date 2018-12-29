@@ -28,6 +28,7 @@ public class Archer : Unit
     void Update()
     {
         if (!isInitialized) { return; }
+        unitInRange.RemoveAll(item => item == null);//nullを削除
 
         bool isTouched = TouchInputManager.Instance
             .CompareToSelfTouchPhase(gameObject, TouchPhase.Ended);
