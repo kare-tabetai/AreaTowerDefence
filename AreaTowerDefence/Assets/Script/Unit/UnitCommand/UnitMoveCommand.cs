@@ -8,10 +8,12 @@ public class UnitMoveCommand : iUnitCommand
     /// <summary>
     /// この移動を示す矢印スプライトあれば終了時破棄する
     /// </summary>
-    MeshRenderer[] allows;
+    Transform[] allows;
 
     public void Initialize(UnitInformation unitInfo, Vector3 destination,bool drawAllow = false)
     {
+        const float InstOffsetY = 0.02f;
+
         if (!unitInfo.Movable) { return; }
         NavMeshPath path = new NavMeshPath();
         var b= unitInfo.Agent.CalculatePath(destination, path);
@@ -29,11 +31,9 @@ public class UnitMoveCommand : iUnitCommand
             var allowBody = ResourceManager.Instance.MoveAllowBodyPrefab;
             var corners = path.corners;
             var previousPoint = unitInfo.Unit.transform.position;
-            allows = new MeshRenderer[corners.Length];
-            Debug.Log(corners.Length);
+            allows = new Transform[corners.Length + 1];
             for (int i = 0; i < corners.Length; i++)
             {
-                //const float MinLength = 0.01f;
 
                 Vector3 vec = corners[i] - previousPoint;
                 if (vec == Vector3.zero)
@@ -42,21 +42,20 @@ public class UnitMoveCommand : iUnitCommand
                     continue;
                 }
                 float magnitude = vec.magnitude;
-                //if (vec.sqrMagnitude < MinLength)
-                //{
-                //    previousPoint = corners[i];
-                //    continue;
-                //}
-                Vector3 instPos = previousPoint + vec / 2;
-                allows[i] = GameObject.Instantiate(allowBody, instPos, allowBody.transform.rotation).GetComponent<MeshRenderer>();
+                Vector3 instPos = previousPoint + vec / 2+Vector3.up*InstOffsetY;
+                allows[i] = GameObject.Instantiate(allowBody, instPos, allowBody.transform.rotation).transform;
                 allows[i].transform.forward = vec;
+                allows[i].transform.Rotate(Vector3.right*(-90));
                 Vector3 tmp = allows[i].transform.localScale;
-                tmp.z *= magnitude;
+                tmp.y *= magnitude;
                 allows[i].transform.localScale = tmp;
                 previousPoint = corners[i];
             }
 
-            allows[allows.Length-1] = GameObject.Instantiate(allowBody, destination, allowTop.transform.rotation).GetComponent<MeshRenderer>();
+            Vector3 way = destination - previousPoint;
+            allows[allows.Length-1] = GameObject.Instantiate(allowTop, destination+Vector3.up*InstOffsetY, allowTop.transform.rotation).transform;
+            allows[allows.Length - 1].transform.forward = way;
+            allows[allows.Length - 1].transform.Rotate(Vector3.right * (-90));
         }
     }
     public void UpdateUnitInstruction(UnitInformation unitInfo)

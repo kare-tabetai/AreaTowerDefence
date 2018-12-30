@@ -112,6 +112,7 @@ public class PlayerActorController : ActorController {
 
             if (draggingIntializedUnit != null)
             {
+                //これより短い移動は
                 const float DestinationMinLength = 0.5f;
 
                 var destinationPos = touchInfo.RayCastInfo.point;
@@ -127,6 +128,7 @@ public class PlayerActorController : ActorController {
             }
         }
 
+        draggingIntializedUnit = null;
         draggingInstUnitData = null;
         Destroy(draggingInstUnit);
         draggingInstUnit = null;
