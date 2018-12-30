@@ -45,6 +45,10 @@ public class UnitMoveCommand : iUnitCommand
     }
     public void Finalize(UnitInformation unitInfo)
     {
-        if (allowSprite != null) { GameObject.Destroy(allowSprite.gameObject); }
+        Debug.Assert(allows != null);
+        foreach(var allow in allows)
+        {
+            GameObject.Destroy(allow);
+        }
     }
 }
