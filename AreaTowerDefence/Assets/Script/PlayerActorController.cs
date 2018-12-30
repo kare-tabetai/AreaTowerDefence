@@ -72,14 +72,13 @@ public class PlayerActorController : ActorController {
         }
 
         var unit = touchInfo.RayCastInfo.collider.GetComponent<Unit>();
-        if (unit != null)
+        if (unit != null&&unit.IsInitialized)
         {
             draggingIntializedUnit = unit;
             isActorDragging = true;
         }
     }
 
-    //wip
     void TouchMoved(TouchInputManager.TouchInfo touchInfo)
     {
         if (!touchInfo.ObjectHit) { return; }
@@ -93,22 +92,7 @@ public class PlayerActorController : ActorController {
         {
             draggingInstUnit.transform.position = touchInfo.RayCastInfo.point;
         }
-        if (draggingIntializedUnit != null)
-        {
-            const float DestinationMinLength = 1.0f;
-
-            var destinationPos = touchInfo.RayCastInfo.point;
-            Vector3 vec =
-                destinationPos - draggingIntializedUnit.transform.position;
-            float sqrDist = vec.sqrMagnitude;
-            if(DestinationMinLength * DestinationMinLength <=sqrDist)
-            {
-                var moveCommand = new UnitMoveCommand();
-                var unitInfo = draggingIntializedUnit.PackUnitInformation();
-                moveCommand.Initialize(unitInfo, destinationPos, true);
-                draggingIntializedUnit.CommandQueue.Enqueue(moveCommand);
-            }
-        }
+        
     }
 
     void TouchEnded(TouchInputManager.TouchInfo touchInfo)
@@ -124,6 +108,22 @@ public class PlayerActorController : ActorController {
             if (touchObject != null)
             {
                 touchObject.TouchEnd(touchInfo);
+            }
+
+            if (draggingIntializedUnit != null)
+            {
+                const float DestinationMinLength = 0.5f;
+
+                var destinationPos = touchInfo.RayCastInfo.point;
+                Vector3 vec =
+                    destinationPos - draggingIntializedUnit.transform.position;
+                if (DestinationMinLength * DestinationMinLength <= vec.sqrMagnitude)
+                {
+                    var moveCommand = new UnitMoveCommand();
+                    var unitInfo = draggingIntializedUnit.PackUnitInformation();
+                    moveCommand.Initialize(unitInfo, destinationPos, true);
+                    draggingIntializedUnit.CommandQueue.Enqueue(moveCommand);
+                }
             }
         }
 

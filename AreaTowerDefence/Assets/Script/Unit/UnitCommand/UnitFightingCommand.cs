@@ -37,6 +37,7 @@ public class UnitFightingCommand : iUnitCommand
         if (rangeInUnitList.Count == 0)
         {
             Finalize(unitInfo);
+            Debug.Assert(unitInfo.InstrucitonQueue.Peek() == this);
             unitInfo.InstrucitonQueue.Dequeue();
             unitInfo.Agent.isStopped = false;
             unitInfo.Animator.SetBool("Attack", false);

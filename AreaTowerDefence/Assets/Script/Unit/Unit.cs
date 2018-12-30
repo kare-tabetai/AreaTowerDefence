@@ -14,6 +14,7 @@ public abstract class Unit : HpActor {
     protected TextMeshPro debugText;
 
     protected bool isInitialized;//unitが召喚エリアに置かれたらtrueに
+    public bool IsInitialized { get { return isInitialized; } }
     protected Transform targetTower;
     protected NavMeshAgent agent;
     protected Animator animator;
@@ -75,6 +76,15 @@ public abstract class Unit : HpActor {
         unitInformation.Agent = agent;
         unitInformation.Animator = animator;
         return unitInformation;
+    }
+
+    [ContextMenu("DebugPrintCommandQueue")]
+    public void DebugPrintCommandQueue()
+    {
+        foreach(var item in CommandQueue)
+        {
+            print(item.ToString());
+        }
     }
 
     /// <summary>
