@@ -20,13 +20,4 @@ public struct UnitInformation
     public Transform TargetTower;
     public NavMeshAgent Agent;
     public Animator Animator;
-
-    public void ReleaseQueue()
-    {
-        foreach (var item in this.InstrucitonQueue)
-        {
-            item.Finalize(this);
-        }
-        this.InstrucitonQueue.Clear();
-    }
 }

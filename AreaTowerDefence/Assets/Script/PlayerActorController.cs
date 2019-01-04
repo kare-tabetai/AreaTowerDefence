@@ -35,7 +35,7 @@ public class PlayerActorController : ActorController {
         draggingInstUnitData = instUnit;
         draggingInstUnit = Instantiate(instUnit.InstantiateUnit);
         var unit = draggingInstUnit.GetComponent<Unit>();
-        unit.Instantiated();
+        unit.Active();
         isActorDragging = true;
     }
 

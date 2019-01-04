@@ -8,11 +8,9 @@ using UnityEngine;
 public class ResourceManager : MonoSingleton<ResourceManager>
 {
     [SerializeField]
-    public GameObject MoveAllowTopPrefab;
-    [SerializeField]
-    public GameObject MoveAllowBodyPrefab;
+    public GameObject RootRendererPrefab;
 
-	void Start ()
+    void Start ()
 	{
 		
 	}

@@ -54,7 +54,7 @@ public class Archer : Unit
             if (rangeInUnitList.Count != 0)
             {
                 var unitInfo = PackUnitInformation();
-                unitInfo.ReleaseQueue();
+                unitInfo.Unit.ReleaseCommandQueue();
                 var newInstruction = new UnitFightingCommand();
                 newInstruction.Initialize(unitInfo, rangeInUnitList, attackRag, allow);
                 CommandQueue.Enqueue(newInstruction);

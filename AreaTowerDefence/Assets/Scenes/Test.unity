@@ -824,7 +824,13 @@ Prefab:
         type: 2}
       propertyPath: MoveAllowBodyPrefab
       value: 
-      objectReference: {fileID: 1751249324685234, guid: 7f80db766c89b6e4f8fb6e2cfa20a706,
+      objectReference: {fileID: 1639885538822964, guid: d3e3fd7c7e44fc1469fc3b6819fa2bc2,
+        type: 2}
+    - target: {fileID: 114865875021680118, guid: 5f335ab6bbce71042a96e8efefb70575,
+        type: 2}
+      propertyPath: LineRendererObjectPrefab
+      value: 
+      objectReference: {fileID: 1577561412123690, guid: cb03d7f8e5518b94b899cb3b5371af05,
         type: 2}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 5f335ab6bbce71042a96e8efefb70575, type: 2}
@@ -8065,7 +8071,7 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1992980864}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 8.31, y: 0, z: 5.3462}
   m_LocalScale: {x: 1.449154, y: 1.4491544, z: 1.4491544}
   m_Children: []

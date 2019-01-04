@@ -34,7 +34,7 @@ public abstract class Unit : HpActor {
     /// AiActorCOntrollerでStartが呼ばれる前に呼びたいので
     /// 明示的呼び出しできるようにしている
     /// </summary>
-    public void Instantiated()
+    public void Active()
     {
         debugText = GetComponentInChildren<TextMeshPro>();
         agent = GetComponent<NavMeshAgent>();
@@ -63,6 +63,34 @@ public abstract class Unit : HpActor {
         targetTower = MainSceneManager.Instance.GetNearestOtherPlayerTower(PlayerNumber, transform.position);
         agent.SetDestination(targetTower.position);
         animator.SetFloat("Velocity", agent.speed);
+    }
+
+    /// <summary>
+    /// コマンドキューをFinalizeしてClearする
+    /// </summary>
+    public void ReleaseCommandQueue()
+    {
+        var info = PackUnitInformation();
+        foreach (var item in this.CommandQueue)
+        {
+            item.Finalize(info);
+        }
+        this.CommandQueue.Clear();
+    }
+
+    /// <summary>
+    /// 引数で渡したコマンドのみFinalizeしてClearする
+    /// </summary>
+    public void ReleaseCommandQueue<T>()
+    {
+        var info = PackUnitInformation();
+        var command = CommandQueue.Where(item => item.GetType() == typeof(T));
+        foreach (var item in command)
+        {
+            item.Finalize(info);
+        }
+        //wip
+        //CommandQueue.
     }
 
     public UnitInformation PackUnitInformation()
