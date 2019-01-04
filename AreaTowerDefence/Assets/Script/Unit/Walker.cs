@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
+using System.Linq;
 
 public class Walker : Unit
 {
@@ -17,7 +18,7 @@ public class Walker : Unit
         var unitMoveCommand = new UnitMoveCommand();
         unitMoveCommand
             .Initialize(PackUnitInformation(), targetTower.transform.position);
-        CommandQueue.Enqueue(unitMoveCommand);
+        CommandQueue.Add(unitMoveCommand);
     }
 
     void Start () {
@@ -37,7 +38,7 @@ public class Walker : Unit
         }
 
         if (CommandQueue.Count == 0) { return; }
-        CommandQueue.Peek().UpdateUnitInstruction(PackUnitInformation());
+        CommandQueue.First().UpdateUnitInstruction(PackUnitInformation());
     }
 
     void InstantiateArea()

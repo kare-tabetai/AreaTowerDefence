@@ -16,7 +16,7 @@ public struct UnitInformation
     public int Hp;
     public Unit Unit;
     public bool Movable;
-    public Queue<iUnitCommand> InstrucitonQueue;
+    public List<iUnitCommand> InstrucitonQueue;
     public Transform TargetTower;
     public NavMeshAgent Agent;
     public Animator Animator;

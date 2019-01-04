@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Linq;
 
 public class Archer : Unit
 {
@@ -18,7 +19,7 @@ public class Archer : Unit
         var unitMoveCommand = new UnitMoveCommand();
         unitMoveCommand
             .Initialize(PackUnitInformation(),targetTower.transform.position);
-        CommandQueue.Enqueue(unitMoveCommand);
+        CommandQueue.Add(unitMoveCommand);
     }
 
     void Start ()
@@ -44,9 +45,9 @@ public class Archer : Unit
     {
         if (CommandQueue.Count == 0) { return; }
 
-        debugText.text = CommandQueue.Peek().ToString();
+        debugText.text = CommandQueue.First().ToString();
 
-        var currentCommand = CommandQueue.Peek();
+        var currentCommand = CommandQueue.First();
         var CommandType = currentCommand.GetType();
 
         if (CommandType != typeof(UnitFightingCommand))
@@ -57,13 +58,13 @@ public class Archer : Unit
                 unitInfo.Unit.ReleaseCommandQueue();
                 var newInstruction = new UnitFightingCommand();
                 newInstruction.Initialize(unitInfo, rangeInUnitList, attackRag, allow);
-                CommandQueue.Enqueue(newInstruction);
+                CommandQueue.Add(newInstruction);
             }
         }
 
         if (CommandQueue.Count != 0)
         {
-            CommandQueue.Peek().UpdateUnitInstruction(PackUnitInformation());
+            CommandQueue.First().UpdateUnitInstruction(PackUnitInformation());
         }
     }
 

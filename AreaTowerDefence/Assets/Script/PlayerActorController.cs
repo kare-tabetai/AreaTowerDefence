@@ -123,7 +123,7 @@ public class PlayerActorController : ActorController {
                     var moveCommand = new UnitMoveCommand();
                     var unitInfo = draggingIntializedUnit.PackUnitInformation();
                     moveCommand.Initialize(unitInfo, destinationPos, true);
-                    draggingIntializedUnit.CommandQueue.Enqueue(moveCommand);
+                    draggingIntializedUnit.CommandQueue.Add(moveCommand);
                 }
             }
         }

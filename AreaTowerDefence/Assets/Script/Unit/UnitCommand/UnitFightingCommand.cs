@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Linq;
 
 public class UnitFightingCommand : iUnitCommand
 {
@@ -37,8 +38,8 @@ public class UnitFightingCommand : iUnitCommand
         if (rangeInUnitList.Count == 0)
         {
             Finalize(unitInfo);
-            Debug.Assert(unitInfo.InstrucitonQueue.Peek() == this);
-            unitInfo.InstrucitonQueue.Dequeue();
+            Debug.Assert(unitInfo.InstrucitonQueue.First() == this);
+            unitInfo.InstrucitonQueue.RemoveAt(0);
             unitInfo.Agent.isStopped = false;
             unitInfo.Animator.SetBool("Attack", false);
             return;

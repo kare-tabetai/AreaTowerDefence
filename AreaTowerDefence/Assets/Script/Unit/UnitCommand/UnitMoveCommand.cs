@@ -18,7 +18,7 @@ public class UnitMoveCommand : iUnitCommand
         var b= unitInfo.Agent.CalculatePath(destination, path);
         if (!b)
         {
-            unitInfo.InstrucitonQueue.Dequeue();
+            unitInfo.InstrucitonQueue.RemoveAt(0);
             return;
         }
         unitInfo.Animator.SetFloat("Velocity", unitInfo.Agent.speed);
@@ -56,7 +56,7 @@ public class UnitMoveCommand : iUnitCommand
         if (sqeDist < GoalDistance * GoalDistance)
         {
             Finalize(unitInfo);
-            unitInfo.InstrucitonQueue.Dequeue();
+            unitInfo.InstrucitonQueue.RemoveAt(0);
             return;
         }
         

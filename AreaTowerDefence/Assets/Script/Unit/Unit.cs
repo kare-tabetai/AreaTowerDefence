@@ -22,7 +22,7 @@ public abstract class Unit : HpActor {
     /// <summary>
     /// Dequeue,Enqueue,Clearして管理する
     /// </summary>
-    public Queue<iUnitCommand> CommandQueue=new Queue<iUnitCommand>();
+    public List<iUnitCommand> CommandQueue=new List<iUnitCommand>();
 
     /// <summary>
     /// 移動できるかtrueでも攻撃時などは移動できません

@@ -19,7 +19,7 @@ public class Soldier : Unit {
         var unitMoveCommand = new UnitMoveCommand();
         unitMoveCommand
             .Initialize(PackUnitInformation(), targetTower.transform.position);
-        CommandQueue.Enqueue(unitMoveCommand);
+        CommandQueue.Add(unitMoveCommand);
     }
 
     void Start()
@@ -39,9 +39,9 @@ public class Soldier : Unit {
     {
         if (CommandQueue.Count == 0) { return; }
 
-        debugText.text = CommandQueue.Peek().ToString();
+        debugText.text = CommandQueue.First().ToString();
 
-        var currentCommand = CommandQueue.Peek();
+        var currentCommand = CommandQueue.First();
         var CommandType = currentCommand.GetType();
 
         if (CommandType != typeof(UnitFightingCommand))
@@ -52,14 +52,14 @@ public class Soldier : Unit {
                 unitInfo.Unit.ReleaseCommandQueue();
                 var newInstruction = new UnitFightingCommand();
                 newInstruction.Initialize(unitInfo, rangeInUnitList, attackRag,attackPower);
-                CommandQueue.Enqueue(newInstruction);
+                CommandQueue.Add(newInstruction);
             }
         }
 
         //currentCommandが更新されているかもしれないからPeek
         if (CommandQueue.Count != 0)
         {
-            CommandQueue.Peek().UpdateUnitInstruction(PackUnitInformation());
+            CommandQueue.First().UpdateUnitInstruction(PackUnitInformation());
         }
     }
 
