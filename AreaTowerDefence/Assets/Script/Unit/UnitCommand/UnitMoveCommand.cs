@@ -18,7 +18,7 @@ public class UnitMoveCommand : iUnitCommand
         var b= unitInfo.Agent.CalculatePath(destination, path);
         if (!b)
         {
-            unitInfo.InstrucitonQueue.RemoveAt(0);
+            unitInfo.InstrucitonQueue.Remove(this);
             return;
         }
         unitInfo.Animator.SetFloat("Velocity", unitInfo.Agent.speed);
@@ -34,6 +34,7 @@ public class UnitMoveCommand : iUnitCommand
             var endPos = destination;
             rootRenderer.Initialize(startPos,corners,endPos);
         }
+        initialized = true;
     }
     public override void UpdateUnitInstruction(UnitInformation unitInfo)
     {

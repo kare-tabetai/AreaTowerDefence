@@ -21,6 +21,7 @@ public class UnitFightingCommand : iUnitCommand
         this.rangeInUnitList = rangeInUnitList;
         this.attackRag = attackRag;
         this.attackPower = attackPower;
+        initialized = true;
     }
     public void Initialize(UnitInformation unitInfo, List<Unit> rangeInUnitList, float attackRag, GameObject bulletPrefab)
     {
@@ -29,6 +30,7 @@ public class UnitFightingCommand : iUnitCommand
         this.rangeInUnitList = rangeInUnitList;
         this.attackRag = attackRag;
         this.bulletPrefab = bulletPrefab;
+        initialized = true;
     }
 
     public override void UpdateUnitInstruction(UnitInformation unitInfo)

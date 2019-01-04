@@ -4,8 +4,8 @@ using UnityEngine;
 
 public abstract class iUnitCommand
 {
-    bool finalized;
-    public bool Finalized { get { return finalized; } }
+    protected bool initialized;
+    public bool Initialized { get { return initialized; } }
 
     /// <summary>
     /// 毎フレームのアップデート
