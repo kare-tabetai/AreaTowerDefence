@@ -49,7 +49,7 @@ public class Soldier : Unit {
             if (rangeInUnitList.Count != 0)
             {
                 UnitInformation unitInfo = PackUnitInformation();
-                unitInfo.ReleaseQueue();
+                unitInfo.Unit.ReleaseCommandQueue();
                 var newInstruction = new UnitFightingCommand();
                 newInstruction.Initialize(unitInfo, rangeInUnitList, attackRag,attackPower);
                 CommandQueue.Enqueue(newInstruction);

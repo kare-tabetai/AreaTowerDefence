@@ -55,7 +55,7 @@ public class Wizard : Unit
             if (rangeInUnitList.Count != 0)
             {
                 var unitInfo = PackUnitInformation();
-                unitInfo.ReleaseQueue();
+                unitInfo.Unit.ReleaseCommandQueue();
                 var newInstruction = new UnitFightingCommand();
                 newInstruction.Initialize(unitInfo,rangeInUnitList, attackRag, magicBullet);
                 CommandQueue.Enqueue(newInstruction);
