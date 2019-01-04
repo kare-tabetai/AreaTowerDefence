@@ -35,7 +35,7 @@ public class UnitMoveCommand : iUnitCommand
             rootRenderer.Initialize(startPos,corners,endPos);
         }
     }
-    public void UpdateUnitInstruction(UnitInformation unitInfo)
+    public override void UpdateUnitInstruction(UnitInformation unitInfo)
     {
         const float GoalDistance = 0.7f;
 
@@ -61,7 +61,7 @@ public class UnitMoveCommand : iUnitCommand
         }
         
     }
-    public void Finalize(UnitInformation unitInfo)
+    public override void Finalize(UnitInformation unitInfo)
     {
         if (lineObj != null)
         {

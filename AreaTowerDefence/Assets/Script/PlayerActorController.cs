@@ -8,17 +8,14 @@ public class PlayerActorController : ActorController {
     int unitNum = 0;
     [SerializeField,Disable,Tooltip("ドラッグして選択中の召喚しようとしているUnit")]
     UnitData draggingInstUnitData;
-
     /// <summary>
     /// ドラッグして選択中の召喚しようとしているUnitの実体
     /// </summary>
     GameObject draggingInstUnit;
-
     /// <summary>
     /// 移動させるためなどにつまんでいる,生成,初期化済みunit
     /// </summary>
     Unit draggingIntializedUnit;
-
     [Tooltip("ActorをDragしていればtrue,カメラ移動でなんかつかんでいるかを見る用")]
     bool isActorDragging;
     public bool IsActorDragging { get { return isActorDragging; } }
@@ -120,6 +117,7 @@ public class PlayerActorController : ActorController {
                     destinationPos - draggingIntializedUnit.transform.position;
                 if (DestinationMinLength * DestinationMinLength <= vec.sqrMagnitude)
                 {
+                    draggingIntializedUnit.ReleaseCommandQueue<UnitMoveCommand>();
                     var moveCommand = new UnitMoveCommand();
                     var unitInfo = draggingIntializedUnit.PackUnitInformation();
                     moveCommand.Initialize(unitInfo, destinationPos, true);

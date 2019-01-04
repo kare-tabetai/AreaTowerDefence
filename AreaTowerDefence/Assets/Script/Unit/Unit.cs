@@ -89,8 +89,7 @@ public abstract class Unit : HpActor {
         {
             item.Finalize(info);
         }
-        //wip
-        //CommandQueue.
+        CommandQueue.RemoveAll(item => item.GetType() == typeof(T));
     }
 
     public UnitInformation PackUnitInformation()

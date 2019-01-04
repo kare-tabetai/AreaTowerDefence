@@ -31,7 +31,7 @@ public class UnitFightingCommand : iUnitCommand
         this.bulletPrefab = bulletPrefab;
     }
 
-    public void UpdateUnitInstruction(UnitInformation unitInfo)
+    public override void UpdateUnitInstruction(UnitInformation unitInfo)
     {
 
         //キャスト可能なはず
@@ -79,7 +79,7 @@ public class UnitFightingCommand : iUnitCommand
         }
     }
 
-    public void Finalize(UnitInformation unitInfo)
+    public override void Finalize(UnitInformation unitInfo)
     {
 
     }
