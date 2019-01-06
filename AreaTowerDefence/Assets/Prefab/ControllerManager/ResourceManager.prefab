@@ -51,4 +51,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dddd77c8526707144b77200d3ac0f03b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  MoveAllowSpritePrefab: {fileID: 0}
+  RootRendererPrefab: {fileID: 1342230937412424, guid: 10bce43fe2648f14e98eedad8a05f7b6,
+    type: 2}

@@ -8163,6 +8163,12 @@ Prefab:
       propertyPath: costCounter
       value: 
       objectReference: {fileID: 1395102447}
+    - target: {fileID: 114661987728145498, guid: 39f5525f48dd9e7489c15860951a5039,
+        type: 2}
+      propertyPath: destinationObjectPrefab
+      value: 
+      objectReference: {fileID: 1699030867535076, guid: 53be991f74cb902499a9103b945f4075,
+        type: 2}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 39f5525f48dd9e7489c15860951a5039, type: 2}
   m_IsPrefabParent: 0
