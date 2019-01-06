@@ -19,7 +19,7 @@ public class RootRenderer : MonoBehaviour
         for (int i = 0; i < corners.Length; i++)
         {
             var point = corners[i];
-            point.y += 0.5f;//床との重なり防止
+            point.y += 0.6f;//床との重なり防止
             lineRenderer.SetPosition(i, point);
         }
         var endPos = end;

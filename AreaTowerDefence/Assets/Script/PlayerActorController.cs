@@ -8,14 +8,22 @@ public class PlayerActorController : ActorController {
     int unitNum = 0;
     [SerializeField,Disable,Tooltip("ドラッグして選択中の召喚しようとしているUnit")]
     UnitData draggingInstUnitData;
+    [SerializeField, Tooltip("召喚したunitをつまんで移動させたいときに出す目的地のprefab")]
+    GameObject destinationObjectPrefab;
+
     /// <summary>
-    /// ドラッグして選択中の召喚しようとしているUnitの実体
+    /// ドラッグして選択中の召喚しようとしているUnit
     /// </summary>
     GameObject draggingInstUnit;
     /// <summary>
     /// 移動させるためなどにつまんでいる,生成,初期化済みunit
     /// </summary>
     Unit draggingIntializedUnit;
+    /// <summary>
+    /// 召喚したunitをつまんで移動させたいときに出す目的地
+    /// </summary>
+    GameObject destinationObject;
+
     [Tooltip("ActorをDragしていればtrue,カメラ移動でなんかつかんでいるかを見る用")]
     bool isActorDragging;
     public bool IsActorDragging { get { return isActorDragging; } }
@@ -73,6 +81,7 @@ public class PlayerActorController : ActorController {
         {
             draggingIntializedUnit = unit;
             isActorDragging = true;
+            destinationObject = Instantiate(destinationObjectPrefab, touchInfo.RayCastInfo.point, destinationObjectPrefab.transform.rotation);
         }
     }
 
@@ -89,7 +98,13 @@ public class PlayerActorController : ActorController {
         {
             draggingInstUnit.transform.position = touchInfo.RayCastInfo.point;
         }
-        
+
+        if (draggingIntializedUnit != null)
+        {
+            var pos = touchInfo.RayCastInfo.point;
+            pos.y += 0.1f;
+            destinationObject.transform.position = pos;
+        }
     }
 
     void TouchEnded(TouchInputManager.TouchInfo touchInfo)
@@ -107,9 +122,10 @@ public class PlayerActorController : ActorController {
                 touchObject.TouchEnd(touchInfo);
             }
 
+            //移動コマンドを投げる処理
             if (draggingIntializedUnit != null)
             {
-                //これより短い移動は
+                //これより短い移動は受理しない
                 const float DestinationMinLength = 0.5f;
 
                 var destinationPos = touchInfo.RayCastInfo.point;
@@ -126,6 +142,7 @@ public class PlayerActorController : ActorController {
             }
         }
 
+        if (destinationObject != null) { Destroy(destinationObject); }
         draggingIntializedUnit = null;
         draggingInstUnitData = null;
         Destroy(draggingInstUnit);
