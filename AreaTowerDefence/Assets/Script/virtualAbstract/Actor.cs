@@ -7,8 +7,8 @@ using UnityEngine;
 /// PlayerNumberが必要なもの
 /// </summary>
 public abstract class Actor : MonoBehaviour {
-    [SerializeField,Disable]
-    int playerNumber;
+    [SerializeField]
+    int playerNumber;//prefabごとに変えたい場合もあるのでDisableにはしない
     public int PlayerNumber
     {
         get { return playerNumber; }
