@@ -1,14 +1,14 @@
 fileFormatVersion: 2
-guid: b7ce77ce6a5de6646a3bb5a7f5ae7f7c
+guid: 332afa15178439b47889f880a5e8d4d7
 ModelImporter:
   serializedVersion: 22
   fileIDToRecycleName:
     100000: //RootNode
     400000: //RootNode
-    2100000: allow.001
+    2100000: Castle
     2300000: //RootNode
     3300000: //RootNode
-    4300000: allow
+    4300000: Castle
   externalObjects: {}
   materials:
     importMaterials: 1
@@ -45,7 +45,7 @@ ModelImporter:
     addColliders: 0
     importVisibility: 1
     importBlendShapes: 1
-    importCameras: 0
+    importCameras: 1
     importLights: 1
     swapUVChannels: 0
     generateSecondaryUV: 0
